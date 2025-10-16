@@ -67,6 +67,10 @@ import preventOutagesImg from "./assets/images/Prevent Outages Before They Happe
 import cutCostsImg from "./assets/images/Cut Operational Costs.png";
 import scaleIntelligenceImg from "./assets/images/Scale with Intelligence.png";
 import sustainabilitySafetyImg from "./assets/images/Sustainability & Safety.png";
+import benefitsImage from "./assets/images/benefits.png";
+import CollaborativeCulture from "./assets/images/Collaborative Culture.png";
+import GrowthLearning from "./assets/images/Growth&Learning.png";
+import InnovateImpact from "./assets/images/InnovateImpact.png";
 
 // 3D Background Component
 const ThreeDBackground = () => {
@@ -337,7 +341,7 @@ const CustomCursor = () => {
 //     </header>
 //   );
 // };
-// Loading Screen Component 
+// Loading Screen Component
 const LoadingScreen = ({ isLoading, progress, displayText }) => {
   if (!isLoading) return null;
 
@@ -891,63 +895,67 @@ const DroneCompanyWebsite = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-              <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-cyan-500/20 shadow-sm flex flex-col justify-center items-center text-center">
-                <h3 className="text-2xl font-bold mb-6 text-cyan-400">
-                  Send us a message
-                </h3>
-                <p className="text-cyan-200 mb-6 max-w-sm">
-                  Have a question or want to request a demo? Click the button
-                  below to open our contact form.
-                </p>
-                <a
-                  href="https://forms.gle/your-google-form-id" // <-- IMPORTANT: Replace with your actual Google Form link
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full max-w-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive flex items-center justify-center"
-                >
-                  <Send size={20} className="mr-2" />
-                  Open Contact Form
-                </a>
-              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                {/* This is the "Send us a message" column, which still has its box */}
+                <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-cyan-500/20 shadow-sm flex flex-col justify-center items-center text-center">
+                  <h3 className="text-2xl font-bold mb-6 text-cyan-400">
+                    Send us a message
+                  </h3>
+                  <p className="text-cyan-200 mb-6 max-w-sm">
+                    Have a question or want to request a demo? Click the button
+                    below to open our contact form.
+                  </p>
+                  <a
+                    href="https://forms.gle/your-google-form-id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full max-w-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive flex items-center justify-center"
+                  >
+                    <Send size={20} className="mr-2" />
+                    Open Contact Form
+                  </a>
+                </div>
 
-              <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-cyan-500/20 shadow-sm">
-                <h3 className="text-xl font-bold mb-6 text-cyan-400 text-center">
-                  Our Locations
-                </h3>
-                <div className="flex flex-col space-y-4">
-                  {/* NOTE: Replace placeholder map links with your actual Google Maps links */}
-                  <a
-                    href="https://maps.app.goo.gl/example"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-3 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                  >
-                    <MapPin size={18} /> Florida, USA
-                  </a>
-                  <a
-                    href="https://maps.app.goo.gl/example"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-3 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                  >
-                    <MapPin size={18} /> California, USA
-                  </a>
-                  <a
-                    href="https://maps.app.goo.gl/example"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-3 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                  >
-                    <MapPin size={18} /> Kolkata, India
-                  </a>
-                  <a
-                    href="https://maps.app.goo.gl/example"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-3 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                  >
-                    <MapPin size={18} /> Hyderabad, India
-                  </a>
+                {/* MODIFIED: Styling classes removed from this div to eliminate the background box */}
+                <div>
+                  <h3 className="text-xl font-bold mb-6 text-cyan-400 text-center">
+                    Our Locations
+                  </h3>
+                  <div className="flex flex-col space-y-4 items-center w-64 mx-auto">
+                    {/* Location links remain the same */}
+                    <a
+                      href="https://www.google.com/maps/place/Advanced+Dermatology+and+Cosmetic+Surgery+-+Tampa+-+14521+University+Point+Pl/@28.0800945,-82.4155504,250m/data=!3m3!1e3!4b1!5s0x88c2c78dc51f0d4f:0xb21e40aa70f7c7d3!4m6!3m5!1s0x88c2c78dc4f1b19d:0xb3a747aea2424cf8!8m2!3d28.0800933!4d-82.4149067!16s%2Fg%2F1td266r6?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
+                    >
+                      <MapPin size={18} /> Florida, USA
+                    </a>
+                    <a
+                      href="https://www.google.com/maps/place/Regus+-+Pasadena+-+Century+Square/@34.1484868,-118.1353697,939m/data=!3m2!1e3!4b1!4m6!3m5!1s0x80c2c3431b587ea7:0x6b3e4a4af58f3488!8m2!3d34.1484824!4d-118.1327948!16s%2Fg%2F11rpdz88j?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
+                    >
+                      <MapPin size={18} /> California, USA
+                    </a>
+                    <a
+                      href="https://www.google.com/maps/place/Regus+-+Kolkata,+RDB+Boulevard/@22.5799603,88.4353795,1048m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3a02758c7a1825d3:0x1ff36b9b5ff644e8!8m2!3d22.5799554!4d88.4379544!16s%2Fg%2F11f7hpwwyr?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
+                    >
+                      <MapPin size={18} /> Kolkata, India
+                    </a>
+                    <a
+                      href="https://www.google.com/maps/search/Hyderabad+address:+Krithika+Layout+Plot+No+3,+Hyderabad,+Telangana+500081,+India/@17.4443344,78.3776199,4329m/data=!3m2!1e3!4b1?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
+                    >
+                      <MapPin size={18} /> Hyderabad, India
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -981,8 +989,8 @@ const DroneCompanyWebsite = () => {
 // Careers Page Component
 const CareersPage = () => {
   const [filter, setFilter] = useState("All");
+  const [locationFilter, setLocationFilter] = useState("All Locations");
 
-  // <-- IMPORTANT: Replace this with the link to your job application form or system
   const formLink = "https://forms.gle/your-job-application-form-id";
 
   const jobListings = [
@@ -992,6 +1000,8 @@ const CareersPage = () => {
       location: "Kolkata, India",
       type: "Full-time",
       experience: "5+ years",
+      description:
+        "Lead the design and development of our next-generation autonomous drone fleet for grid inspection.",
       skills: ["Drone Technology", "IoT", "Python", "CAD"],
     },
     {
@@ -1000,6 +1010,8 @@ const CareersPage = () => {
       location: "Remote",
       type: "Full-time",
       experience: "4+ years",
+      description:
+        "Develop and implement cutting-edge machine learning models for real-time anomaly detection from drone sensor data.",
       skills: ["Machine Learning", "Python", "TensorFlow", "Data Analysis"],
     },
     {
@@ -1008,6 +1020,8 @@ const CareersPage = () => {
       location: "Kolkata, India",
       type: "Full-time",
       experience: "6+ years",
+      description:
+        "Architect and manage our global network of IoT devices, ensuring robust data pipelines from edge to cloud.",
       skills: [
         "IoT Architecture",
         "Cloud Computing",
@@ -1021,17 +1035,27 @@ const CareersPage = () => {
       location: "Hybrid",
       type: "Contract",
       experience: "5+ years",
+      description:
+        "Integrate our core monitoring platform with SAP BTP/CPI to automate work order generation and field responses.",
       skills: ["SAP CPI", "BTP", "API Integration", "Java"],
     },
   ];
 
-  const filteredJobs =
-    filter === "All"
-      ? jobListings
-      : jobListings.filter((job) => job.department === filter);
+  const filteredJobs = jobListings
+    .filter((job) => filter === "All" || job.department === filter)
+    .filter(
+      (job) =>
+        locationFilter === "All Locations" || job.location === locationFilter
+    );
+
   const departments = [
     "All",
     ...new Set(jobListings.map((job) => job.department)),
+  ];
+
+  const locations = [
+    "All Locations",
+    ...new Set(jobListings.map((job) => job.location)),
   ];
 
   return (
@@ -1039,12 +1063,10 @@ const CareersPage = () => {
       <ThreeDBackground />
       <CustomCursor />
       <BackToTopButton />
-      {/* FIX: Removed unused props. Header now manages its own state. */}
-      {/* <Header /> */}
 
       <main className="w-full px-4 py-12 pt-20 relative z-10">
         <div className="mx-auto max-w-7xl">
-          <section className="text-center mb-20">
+          <section className="text-center mb-24">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
               Shape the Future With Us
             </h1>
@@ -1054,32 +1076,33 @@ const CareersPage = () => {
             </p>
           </section>
 
-          <section className="mb-20">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
+          <section className="mb-24">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
               Why Join COEUS?
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Retaining max-w-6xl for overall grid width, gap-6 is good */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {[
                 {
-                  icon: <Sparkles size={32} />,
+                  imageUrl: InnovateImpact, // Updated placeholder size for larger image
                   title: "Innovate & Impact",
                   description:
                     "Work on challenging projects that have a real-world impact on grid reliability and safety.",
                 },
                 {
-                  icon: <Award size={32} />,
+                  imageUrl: GrowthLearning,
                   title: "Growth & Learning",
                   description:
                     "We invest in your professional development with continuous learning opportunities.",
                 },
                 {
-                  icon: <Users size={32} />,
+                  imageUrl: CollaborativeCulture,
                   title: "Collaborative Culture",
                   description:
                     "Be part of a diverse, inclusive, and supportive team that values every voice.",
                 },
                 {
-                  icon: <Heart size={32} />,
+                  imageUrl: benefitsImage, // Assuming benefitsImage is imported at the top
                   title: "Great Benefits",
                   description:
                     "Enjoy competitive salaries, comprehensive health benefits, and a flexible work environment.",
@@ -1087,15 +1110,30 @@ const CareersPage = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 text-center hover:border-cyan-400/50 hover:-translate-y-2 transition-all duration-300"
+                  // Drastically reduced horizontal padding (px-4) while maintaining vertical padding (py-6)
+                  // for a more square appearance of the card.
+                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl px-4 py-6 border border-cyan-500/20 text-center hover:border-cyan-400/50 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-between" // Added justify-between to push description to bottom
                 >
-                  <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 mx-auto text-white">
-                    {item.icon}
+                  {/* Increased image wrapper size from w-20 h-20 to w-28 h-28 */}
+                  {/* Adjusted mb for better spacing after the larger image and before title */}
+                  <div className="w-28 h-28 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 overflow-hidden shadow-lg">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-full h-full object-cover rounded-xl"
+                    />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  {/* Title and Description sizing adjusted to fit the squarer box */}
+                  <h3 className="text-base font-bold text-white mb-2 leading-tight">
+                    {" "}
+                    {/* Added leading-tight for compact title */}
                     {item.title}
                   </h3>
-                  <p className="text-cyan-200">{item.description}</p>
+                  <p className="text-cyan-200 text-xs leading-snug">
+                    {" "}
+                    {/* Added leading-snug for compact description */}
+                    {item.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -1103,90 +1141,128 @@ const CareersPage = () => {
 
           <section
             id="openings"
-            className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 md:p-12 border border-cyan-500/20 shadow-lg mb-20 max-w-6xl w-full mx-auto space-y-3"
-          > 
+            className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 md:p-12 border border-cyan-500/20 shadow-lg mb-24 max-w-5xl w-full mx-auto"
+          >
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-cyan-400">
               Current Openings
             </h2>
-            <p className="text-center text-cyan-200 mb-8">
+            <p className="text-center text-cyan-200 mb-10">
               Find your next opportunity in our list of open positions.
             </p>
 
-            <div className="flex flex-wrap items-center mx-auto justify-center gap-3 mb-10 space-y-3">
-              {departments.map((dept) => (
-                <button
-                  key={dept}
-                  onClick={() => setFilter(dept)}
-                  className={`px-6 py-2 rounded-full font-medium transition-all duration-300 interactive ${
-                    filter === dept
-                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg"
-                      : "bg-gray-700/50 text-cyan-200 hover:bg-gray-700 hover:text-white"
-                  }`}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto mb-12">
+              <div className="w-full sm:w-1/2 relative">
+                <label htmlFor="department-filter" className="sr-only">
+                  Filter by department
+                </label>
+                <select
+                  id="department-filter"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
                 >
-                  {dept}
-                </button>
-              ))}
+                  {departments.map((dept) => (
+                    <option
+                      key={dept}
+                      value={dept}
+                      className="bg-gray-800 text-white font-medium"
+                    >
+                      {dept === "All" ? "All Departments" : dept}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-400">
+                  <ChevronDown size={20} />
+                </div>
+              </div>
+
+              <div className="w-full sm:w-1/2 relative">
+                <label htmlFor="location-filter" className="sr-only">
+                  Filter by location
+                </label>
+                <select
+                  id="location-filter"
+                  value={locationFilter}
+                  onChange={(e) => setLocationFilter(e.target.value)}
+                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
+                >
+                  {locations.map((loc) => (
+                    <option
+                      key={loc}
+                      value={loc}
+                      className="bg-gray-800 text-white font-medium"
+                    >
+                      {loc}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-400">
+                  <ChevronDown size={20} />
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-6 mx-auto flex items-center max-w-3xl w-full flex-row gap-4">
+            <div className="space-y-8">
               {filteredJobs.length > 0 ? (
-                filteredJobs.map((job, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-900/40 rounded-xl border border-cyan-500/20 overflow-hidden transition-all duration-300 hover:border-cyan-400/50 hover:shadow-2xl hover:shadow-cyan-500/10 group h-[33rem] max-w-3xl w-full"
+                filteredJobs.map((job) => (
+                  <a
+                    key={job.title}
+                    href={formLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-gray-900/40 p-8 rounded-2xl border border-cyan-500/20 text-center transition-all duration-300 relative overflow-hidden group hover:border-cyan-400/60"
                   >
-                    <div className="p-6 md:p-8">
-                      <div className="flex flex-col md:flex-row justify-between md:items-center mb-4">
-                        <h3 className="text-2xl font-bold text-white mb-2 md:mb-0 group-hover:text-cyan-400 transition-colors">
-                          {job.title}
-                        </h3>
-                        <span className="inline-block bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 text-sm font-medium px-4 py-1.5 rounded-full self-start md:self-center">
-                          {job.type}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-x-6 gap-y-3 text-cyan-300 mb-6 border-b border-cyan-500/10 pb-4">
-                        <span className="flex items-center">
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                    <div className="relative z-10">
+                      {/* CHANGE: Updated the styling for the job type tag */}
+                      <span className="inline-block bg-cyan-900/50 text-cyan-200 text-xs font-semibold tracking-wider uppercase px-4 py-1.5 rounded-full mb-4 border border-cyan-500/30">
+                        {job.type}
+                      </span>
+
+                      <h3 className="text-3xl font-bold text-white mb-6 group-hover:text-cyan-300 transition-colors">
+                        {job.title}
+                      </h3>
+                      <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-cyan-300 mb-6">
+                        <span className="flex items-center text-sm">
                           <Briefcase size={16} className="mr-2" />{" "}
                           {job.department}
                         </span>
-                        <span className="flex items-center">
-                          <MapPin size={16} className="mr-2" /> {job.location}
-                        </span>
-                        <span className="flex items-center">
+                        <span className="flex items-center text-sm">
                           <Clock size={16} className="mr-2" /> {job.experience}
                         </span>
                       </div>
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                        <div className="mb-4 md:mb-0">
-                          <h4 className="font-semibold text-cyan-200 mb-2">
-                            Required Skills:
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {job.skills.map((skill, skillIndex) => (
-                              <span
-                                key={skillIndex}
-                                className="bg-cyan-900/40 text-cyan-200 px-3 py-1 rounded-full text-sm font-medium"
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
+
+                      <div className="w-24 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent mx-auto mb-6"></div>
+                      <p className="text-cyan-200/90 max-w-2xl mx-auto mb-6 text-justify">
+                        {job.description}
+                      </p>
+
+                      <div>
+                        <h4 className="font-semibold text-cyan-200 mb-3">
+                          Required Skills
+                        </h4>
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          {job.skills.map((skill) => (
+                            <span
+                              key={skill}
+                              className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 border border-cyan-500/40 text-cyan-100 px-4 py-1.5 rounded-full text-sm font-medium hover:scale-105 transition-transform duration-200 cursor-pointer shadow-md"
+                            >
+                              {skill}
+                            </span>
+                          ))}
                         </div>
-                        <button
-                          onClick={() => window.open(formLink, "_blank")}
-                          className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/20 interactive flex items-center gap-2"
-                        >
-                          Apply Now <ArrowRight size={18} />
-                        </button>
+                      </div>
+
+                      <div className="text-cyan-400 mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center font-semibold">
+                        View & Apply <ArrowRight size={18} className="ml-2" />
                       </div>
                     </div>
-                  </div>
+                  </a>
                 ))
               ) : (
-                <div className="text-center py-10">
+                <div className="text-center py-10 px-6 bg-gray-900/30 rounded-lg">
                   <p className="text-cyan-200 text-lg">
-                    No open positions in this department at the moment. Please
-                    check back later!
+                    No open positions match your selected filters.
                   </p>
                 </div>
               )}
@@ -1194,32 +1270,28 @@ const CareersPage = () => {
           </section>
 
           <section>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
               Our Hiring Process
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
               {[
                 {
-                  icon: <FileText />,
-                  title: "1. Application",
+                  title: "Application",
                   description:
                     "Submit your resume through our online portal. We review every application carefully.",
                 },
                 {
-                  icon: <UserCheck />,
-                  title: "2. Initial Screening",
+                  title: "Initial Screening",
                   description:
                     "Our HR team will reach out for a preliminary chat to get to know you better.",
                 },
                 {
-                  icon: <MessageSquare />,
-                  title: "3. Technical Interview",
+                  title: "Technical Interview",
                   description:
                     "Meet with the team to discuss your skills, experience, and solve technical challenges.",
                 },
                 {
-                  icon: <Award />,
-                  title: "4. Final Offer",
+                  title: "Final Offer",
                   description:
                     "Congratulations! If you're a match, we'll extend an offer to welcome you to the team.",
                 },
@@ -1230,12 +1302,12 @@ const CareersPage = () => {
                       {index + 1}
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3">
-                      {step.title.substring(3)}
+                      {step.title}
                     </h3>
                     <p className="text-cyan-200">{step.description}</p>
                   </div>
                   {index < 3 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-px bg-cyan-500/30"></div>
+                    <div className="hidden lg:block absolute top-1/2 left-[95%] w-1/5 h-px bg-cyan-500/30"></div>
                   )}
                 </div>
               ))}
@@ -1510,4 +1582,10 @@ const TalentSolutionsPage = () => {
 };
 
 // FIX: Corrected export statement for clarity. This file now exports all the necessary page components.
-export {BackToTopButton,LoadingScreen, DroneCompanyWebsite, CareersPage, TalentSolutionsPage };
+export {
+  BackToTopButton,
+  LoadingScreen,
+  DroneCompanyWebsite,
+  CareersPage,
+  TalentSolutionsPage,
+};

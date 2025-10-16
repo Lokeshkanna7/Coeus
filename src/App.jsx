@@ -1,3 +1,4 @@
+// Filename: App.js (Corrected)
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Header.jsx';
@@ -28,7 +29,7 @@ function App() {
     }
     // Mark the initialization check as complete.
     setIsInitialized(true);
-  }, []); // Empty dependency array ensures this runs only once.
+  }, []); // <-- FIX: Use an empty array to run this effect only once on mount.
 
   useEffect(() => {
     // This effect handles the loading animation itself.
@@ -52,21 +53,22 @@ function App() {
           setTimeout(() => {
             setShowLoading(false);
             try {
+              // Set the flag in localStorage so the loading screen doesn't show again.
               localStorage.setItem('hasVisited', 'true');
             } catch (err) {
               console.warn('localStorage write failed:', err);
             }
-          }, 350);
+          }, 350); // A short delay for the "Finalizing" text to be readable.
           return 100;
         }
         
         return newProgress;
       });
-    }, 100);
+    }, 100); // The speed of the loading bar.
 
-    // Cleanup function.
+    // Cleanup function to prevent memory leaks.
     return () => clearInterval(interval);
-  }, [showLoading]); // This effect depends on 'showLoading'.
+  }, [showLoading]); // This effect correctly depends on 'showLoading'.
 
   // Before the localStorage check is complete, render nothing to avoid a content flash.
   if (!isInitialized) {
@@ -92,4 +94,3 @@ function App() {
 }
 
 export default App;
-

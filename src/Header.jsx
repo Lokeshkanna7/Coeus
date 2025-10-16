@@ -61,9 +61,9 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* ✅ Logo */}
-          <Link to="/" className="flex-shrink-0 flex items-center">
-            <img src={logoImg} alt="COEUS Logo" className="h-10 w-auto" />
-            <span className="ml-3 text-xl font-bold text-white">COEUS</span>
+          <Link to="/" className="flex-shrink-0 flex items-center -ml-4">
+            <img src={logoImg} alt="COEUS Logo" className="h-15 w-auto" />
+            <span className="ml-3 text-xl font-bold text-white"></span>
           </Link>
 
           {/* ✅ Desktop Navigation (only when not mobile) */}
