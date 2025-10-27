@@ -53,3 +53,92 @@ export default {
   plugins: [],
 }
 
+/** @type {import('tailwindcss').Config} */
+    module.exports = {
+      // ... (content array)
+      theme: {
+        extend: {
+          // ... (fontFamily settings)
+
+          // ADD THIS ANIMATION AND KEYFRAMES
+          keyframes: {
+            'fade-in-up': {
+              '0%': {
+                opacity: '0',
+                transform: 'translateY(20px)',
+              },
+              '100%': {
+                opacity: '1',
+                transform: 'translateY(0)',
+              },
+            },
+          },
+          animation: {
+            'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
+          },
+        },
+      },
+      plugins: [],
+    }
+
+    const { fontFamily } = require('tailwindcss/defaultTheme');
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        // Add 'Inter' as the primary sans font
+        sans: ['Inter', ...fontFamily.sans],
+      },
+      // ... (your other 'extend' settings)
+    },
+  },
+  plugins: [],
+}
+
+// tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  // ... (content, etc.)
+  theme: {
+    extend: {
+      // ... (fontFamily, etc.)
+
+      // ADD/UPDATE THESE ANIMATIONS:
+      keyframes: {
+        'fade-in-up': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(20px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+        },
+        // ADD THIS NEW KEYFRAME
+        'slide-down': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(-20px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+        },
+      },
+      animation: {
+        'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
+        // ADD THIS NEW ANIMATION
+        'slide-down': 'slide-down 0.3s ease-out forwards',
+      },
+    },
+  },
+  plugins: [],
+}

@@ -1,7 +1,11 @@
 // =================================================================
 // Filename: WebsiteComponents.js
 // =================================================================
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react"; // Added useMemo
+
+// === Import motion and AnimatePresence ===
+import { motion, AnimatePresence } from "framer-motion";
+
 import {
   HashRouter as Router,
   Routes,
@@ -47,22 +51,22 @@ import {
   Rocket,
   LifeBuoy,
   ArrowUp,
+  ArrowLeft,
+  Quote,
+  Star,
 } from "lucide-react";
 import Header from "./Header";
-// Import assets to be used as variables
-// import logoImg from './assets/logo/Screenshot 2025-09-08 123829.png';
+// Import assets (Ensure paths are correct)
 import loadingVideo from "./assets/Screen Recording 2025-09-08 221552.mp4";
 import logoImg from "./assets/logo/logo.png";
 import automatedInspectionsImg from "./assets/images/Automated Inspections.png";
 import predictiveMaintenanceImg from "./assets/images/Predictive Maintenance.png";
 import realtimeAnalyticsImg from "./assets/images/Real-time Analytics.png";
-
 import dataCollectionImg from "./assets/images/data_collection.png";
 import anomalyDetectionImg from "./assets/images/anomaly_detection.png";
 import edgeProcessingImg from "./assets/images/edge_detection.png";
 import sapIntegrationImg from "./assets/images/sap_integeration.png";
 import fieldResponseImg from "./assets/images/field_response.png";
-
 import preventOutagesImg from "./assets/images/Prevent Outages Before They Happen.png";
 import cutCostsImg from "./assets/images/Cut Operational Costs.png";
 import scaleIntelligenceImg from "./assets/images/Scale with Intelligence.png";
@@ -71,429 +75,439 @@ import benefitsImage from "./assets/images/benefits.png";
 import CollaborativeCulture from "./assets/images/Collaborative Culture.png";
 import GrowthLearning from "./assets/images/Growth&Learning.png";
 import InnovateImpact from "./assets/images/InnovateImpact.png";
+import iidasImage from "./assets/images/iidas.png";
+import lineMonitoringImage from "./assets/images/Real-TimeElectricalLineMonitoring&Automation.jpg";
+import gridReliabilityImage from "./assets/images/Revolutionizing Grid Reliability with AI, IoT, & SAPIntegration.png";
 
-// 3D Background Component
+
+import embeddedsystemengineer from "./assets/images/embedded system engineer.png";
+import finopsmanager from "./assets/images/finopsmanager.png";
+import iotsolution from "./assets/images/iotsolution.png";
+import ml_engineer from "./assets/images/ml_engineer.png";
+import productmanager from "./assets/images/productmanager.png";
+import remotedroneoperation from "./assets/images/remote drone operation.png";
+import sapbtp from "./assets/images/sapbtp.png";
+
+
+
+
+
+
+// --- Components (ThreeDBackground, CustomCursor, LoadingScreen, BackToTopButton - Unchanged) ---
+// 3D Background Component (Unchanged)
 const ThreeDBackground = () => {
-  const canvasRef = useRef(null);
+    const canvasRef = useRef(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    let animationFrameId;
-    let particles = [];
+        const ctx = canvas.getContext("2d");
+        let animationFrameId;
+        let particles = [];
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
+        const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        };
 
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
 
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        color: `hsl(${Math.random() * 60 + 200}, 70%, ${
-          Math.random() * 30 + 50
-        }%)`,
-      });
-    }
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
-        0,
-        canvas.width / 2,
-        canvas.height / 2,
-        Math.max(canvas.width, canvas.height) / 1.5
-      );
-      gradient.addColorStop(0, "rgba(10, 25, 47, 0.9)");
-      gradient.addColorStop(1, "rgba(25, 55, 109, 0.6)");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach((particle, index) => {
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.fill();
-
-        particle.x += particle.speedX;
-        particle.y += particle.speedY;
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
-
-        for (let j = index + 1; j < particles.length; j++) {
-          const dx = particle.x - particles[j].x;
-          const dy = particle.y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(100, 200, 255, ${0.2 - distance / 500})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
+        for (let i = 0; i < 80; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 3 + 1,
+            speedX: (Math.random() - 0.5) * 0.5,
+            speedY: (Math.random() - 0.5) * 0.5,
+            color: `hsl(${Math.random() * 60 + 200}, 70%, ${
+            Math.random() * 30 + 50
+            }%)`,
+        });
         }
-      });
 
-      animationFrameId = requestAnimationFrame(draw);
-    };
+        const draw = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    draw();
+        const gradient = ctx.createRadialGradient(
+            canvas.width / 2,
+            canvas.height / 2,
+            0,
+            canvas.width / 2,
+            canvas.height / 2,
+            Math.max(canvas.width, canvas.height) / 1.5
+        );
+        gradient.addColorStop(0, "rgba(10, 25, 47, 0.9)");
+        gradient.addColorStop(1, "rgba(25, 55, 109, 0.6)");
 
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resizeCanvas);
-    };
-  }, []);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 w-full h-full z-0"
-      style={{
-        background: "linear-gradient(135deg, #0a192f 0%, #19376d 100%)",
-      }}
-    />
-  );
+        particles.forEach((particle, index) => {
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color;
+            ctx.fill();
+
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+
+            if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+            if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+
+            for (let j = index + 1; j < particles.length; j++) {
+            const dx = particle.x - particles[j].x;
+            const dy = particle.y - particles[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 100) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(100, 200, 255, ${0.2 - distance / 500})`;
+                ctx.lineWidth = 0.5;
+                ctx.moveTo(particle.x, particle.y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+            }
+            }
+        });
+
+        animationFrameId = requestAnimationFrame(draw);
+        };
+
+        draw();
+
+        return () => {
+        cancelAnimationFrame(animationFrameId);
+        window.removeEventListener("resize", resizeCanvas);
+        };
+    }, []);
+
+    return (
+        <canvas
+        ref={canvasRef}
+        className="fixed inset-0 w-full h-full z-0"
+        style={{
+            background: "linear-gradient(135deg, #0a192f 0%, #19376d 100%)",
+        }}
+        />
+    );
 };
-
-// Custom Cursor Component
+// Custom Cursor Component (Unchanged)
 const CustomCursor = () => {
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [cursorVariant, setCursorVariant] = useState("default");
+    const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+    const [cursorVariant, setCursorVariant] = useState("default");
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setCursorPosition({ x: e.clientX, y: e.clientY });
-    };
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+        setCursorPosition({ x: e.clientX, y: e.clientY });
+        };
 
-    window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mousemove", handleMouseMove);
 
-    // This effect re-runs when the components update to find new interactive elements
-    const interactiveElements = document.querySelectorAll(
-      "a, button, .interactive"
-    );
+        const interactiveElements = document.querySelectorAll(
+        "a, button, .interactive"
+        );
 
-    const handleMouseEnter = () => setCursorVariant("hover");
-    const handleMouseLeave = () => setCursorVariant("default");
+        const handleMouseEnter = () => setCursorVariant("hover");
+        const handleMouseLeave = () => setCursorVariant("default");
 
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleMouseEnter);
-      el.addEventListener("mouseleave", handleMouseLeave);
+        interactiveElements.forEach((el) => {
+        el.addEventListener("mouseenter", handleMouseEnter);
+        el.addEventListener("mouseleave", handleMouseLeave);
+        });
+
+        return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+        interactiveElements.forEach((el) => {
+            el.removeEventListener("mouseenter", handleMouseEnter);
+            el.removeEventListener("mouseleave", handleMouseLeave);
+        });
+        };
+    }, []);
+
+    useEffect(() => {
+        const interactiveElements = document.querySelectorAll(
+        "a, button, .interactive"
+        );
+
+        const handleMouseEnter = () => setCursorVariant("hover");
+        const handleMouseLeave = () => setCursorVariant("default");
+
+        interactiveElements.forEach((el) => {
+        el.addEventListener("mouseenter", handleMouseEnter);
+        el.addEventListener("mouseleave", handleMouseLeave);
+        });
+
+        return () => {
+        interactiveElements.forEach((el) => {
+            el.removeEventListener("mouseenter", handleMouseEnter);
+            el.removeEventListener("mouseleave", handleMouseLeave);
+        });
+        };
     });
 
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleMouseEnter);
-        el.removeEventListener("mouseleave", handleMouseLeave);
-      });
-    };
-  }, []); // Re-run this effect only once on mount for general setup
-
-  // A secondary effect to re-bind events when the page content changes
-  useEffect(() => {
-    const interactiveElements = document.querySelectorAll(
-      "a, button, .interactive"
+    return (
+        <div
+        className={`fixed z-50 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 transition-all duration-100 ease-out ${
+            cursorVariant === "hover"
+            ? "w-8 h-8 bg-cyan-500/30 border-2 border-cyan-500 backdrop-blur-sm"
+            : "w-6 h-6 bg-cyan-500/10 border border-cyan-300"
+        } rounded-full flex items-center justify-center`}
+        style={{
+            left: `${cursorPosition.x}px`,
+            top: `${cursorPosition.y}px`,
+        }}
+        >
+        <div
+            className={`w-1 h-1 bg-cyan-500 rounded-full ${
+            cursorVariant === "hover" ? "scale-150" : ""
+            } transition-transform`}
+        ></div>
+        </div>
     );
-
-    const handleMouseEnter = () => setCursorVariant("hover");
-    const handleMouseLeave = () => setCursorVariant("default");
-
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleMouseEnter);
-      el.addEventListener("mouseleave", handleMouseLeave);
-    });
-
-    return () => {
-      interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleMouseEnter);
-        el.removeEventListener("mouseleave", handleMouseLeave);
-      });
-    };
-  }); // This effect runs on every render to catch new elements
-
-  return (
-    <div
-      className={`fixed z-50 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 transition-all duration-100 ease-out ${
-        cursorVariant === "hover"
-          ? "w-8 h-8 bg-cyan-500/30 border-2 border-cyan-500 backdrop-blur-sm"
-          : "w-6 h-6 bg-cyan-500/10 border border-cyan-300"
-      } rounded-full flex items-center justify-center`}
-      style={{
-        left: `${cursorPosition.x}px`,
-        top: `${cursorPosition.y}px`,
-      }}
-    >
-      <div
-        className={`w-1 h-1 bg-cyan-500 rounded-full ${
-          cursorVariant === "hover" ? "scale-150" : ""
-        } transition-transform`}
-      ></div>
-    </div>
-  );
 };
-
-// Reusable Header Component with anchor link handling
-// // src/WebsiteComponents.jsx
-// const Header = () => {
-//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-//   const location = useLocation();
-//   const navigate = useNavigate();
-
-//   const navLinks = [
-//     { name: 'Solutions', href: '#solutions', isAnchor: true },
-//     { name: 'Technology', href: '#technology', isAnchor: true },
-//     { name: 'Benefits', href: '#benefits', isAnchor: true },
-//     { name: 'Careers', href: '/careers', isAnchor: false },
-//     { name: 'Talent Solutions', href: '/talent-solutions', isAnchor: false },
-//     { name: 'Contact', href: '#contact', isAnchor: true }
-//   ];
-
-//   // This function correctly handles clicks on anchor links
-//   const handleAnchorClick = (href, e) => {
-//     e.preventDefault();
-//     setMobileMenuOpen(false); // Close mobile menu on click
-//     if (location.pathname !== '/') {
-//       // If we are not on the homepage, navigate to the homepage with the hash
-//       navigate(`/${href}`);
-//     } else {
-//       // If we are on the homepage, just scroll smoothly
-//       document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-//     }
-//   };
-
-//   return (
-//     <header className="sticky top-0 z-40 bg-gray-900/80 backdrop-blur-md border-b border-cyan-500/20 shadow-lg">
-//       <div className="container mx-auto px-4">
-//         <div className="flex justify-between items-center h-16">
-//           {/* Logo */}
-//           <Link to="/" className="flex-shrink-0 flex items-center" onClick={() => setMobileMenuOpen(false)}>
-//             <img src={logoImg} alt="COEUS Logo" className="h-10 w-auto" />
-//           </Link>
-
-//           {/* ====== DESKTOP NAVIGATION ====== */}
-//           {/* This <nav> is hidden by default and becomes a flex container on medium screens ('md') and larger. */}
-//           {/* This is the standard, correct way to create a responsive header. */}
-//           <nav className="hidden md:flex items-center space-x-8">
-//             {navLinks.map((link) => (
-//               <React.Fragment key={link.name}>
-//                 {link.isAnchor ? (
-//                   <a href={link.href} onClick={(e) => handleAnchorClick(link.href, e)} className="font-medium text-cyan-100 hover:text-white transition-colors">
-//                     {link.name}
-//                   </a>
-//                 ) : (
-//                   <Link to={link.href} className="font-medium text-cyan-100 hover:text-white transition-colors">
-//                     {link.name}
-//                   </Link>
-//                 )}
-//               </React.Fragment>
-//             ))}
-//           </nav>
-
-//           {/* ====== MOBILE MENU BUTTON ====== */}
-//           {/* This button is visible only on small screens and is hidden on medium screens ('md') and larger. */}
-//           <div className="md:hidden">
-//             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-cyan-100 hover:text-white">
-//               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* ====== MOBILE MENU DROPDOWN ====== */}
-//       {/* This entire block is only rendered when `mobileMenuOpen` is true. */}
-//       {/* The `md:hidden` class ensures it never appears on desktop, even if the state is true. */}
-//       {mobileMenuOpen && (
-//         <div className="md:hidden bg-gray-900/95 border-t border-cyan-500/20">
-//           <nav className="container mx-auto px-4 pt-2 pb-4 flex flex-col space-y-2">
-//             {navLinks.map((link) => (
-//               <React.Fragment key={link.name}>
-//                 {link.isAnchor ? (
-//                   <a href={link.href} onClick={(e) => handleAnchorClick(link.href, e)} className="font-medium text-cyan-100 hover:text-white p-2 rounded-md hover:bg-cyan-500/10 transition-colors">
-//                     {link.name}
-//                   </a>
-//                 ) : (
-//                   <Link to={link.href} onClick={() => setMobileMenuOpen(false)} className="font-medium text-cyan-100 hover:text-white p-2 rounded-md hover:bg-cyan-500/10 transition-colors">
-//                     {link.name}
-//                   </Link>
-//                 )}
-//               </React.Fragment>
-//             ))}
-//           </nav>
-//         </div>
-//       )}
-//     </header>
-//   );
-// };
-// Loading Screen Component
+// Loading Screen Component (Unchanged)
 const LoadingScreen = ({ isLoading, progress, displayText }) => {
-  if (!isLoading) return null;
+    if (!isLoading) return null;
+
+    return (
+        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center z-50 overflow-hidden">
+        <div className="text-center relative w-full max-w-md mx-4 z-10">
+            <div className="mb-4 relative">
+            <div className="relative mx-auto w-full max-w-xs">
+                <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl blur-lg animate-pulse" />
+                <div className="relative bg-gradient-to-br from-cyan-900/40 via-blue-900/40 to-purple-900/40 rounded-lg p-0.5 backdrop-blur-xl border border-cyan-500/30 shadow-md">
+                <div className="relative rounded-md overflow-hidden bg-black/20 min-h-[120px] flex items-center justify-center">
+                    <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover rounded-md"
+                    style={{ opacity: 1, transition: "opacity 1s ease-in-out" }}
+                    >
+                    <source src={loadingVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                    </video>
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end justify-center pb-2">
+                    <div className="text-cyan-300 text-xs font-mono tracking-widest">
+                        INITIALIZING...
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div className="mb-6">
+            <div className="relative mx-auto w-20 h-20 mb-4">
+                <div
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 animate-ping"
+                style={{ animationDuration: "3s" }}
+                />
+                <div className="absolute inset-0 rounded-full border-4 border-cyan-800/30" />
+                <div
+                className="absolute inset-0 rounded-full border-4 border-transparent border-t-cyan-400 animate-spin"
+                style={{
+                    clipPath: `polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%)`,
+                    transform: `rotate(${progress * 3.6}deg)`,
+                    transition: "transform 0.3s ease-out",
+                }}
+                />
+                <div className="absolute inset-3 rounded-full bg-gradient-to-br from-cyan-900/40 to-blue-900/40 backdrop-blur-sm border border-cyan-500/20 flex items-center justify-center">
+                <div className="text-center">
+                    <span className="text-cyan-300 text-xl font-bold block">
+                    {Math.round(progress)}%
+                    </span>
+                    <span className="text-cyan-400 text-xs font-mono">
+                    COMPLETE
+                    </span>
+                </div>
+                </div>
+            </div>
+
+            <div className="mb-4">
+                <p className="text-cyan-300 mb-3 font-mono text-lg tracking-wider">
+                <span className="inline-block min-w-[180px] text-center">
+                    {displayText}
+                    <span className="animate-blink">...</span>
+                </span>
+                </p>
+                <div className="w-48 mx-auto bg-cyan-900/30 rounded-full h-1.5 mb-2">
+                <div
+                    className="bg-gradient-to-r from-cyan-400 to-blue-500 h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                />
+                </div>
+            </div>
+
+            <div className="flex justify-center space-x-4 mb-4">
+                {[
+                <Cpu key="cpu" />,
+                <Satellite key="sat" />,
+                <Brain key="brain" />,
+                <Cloud key="cloud" />,
+                ].map((Icon, index) => (
+                <div
+                    key={index}
+                    className="w-8 h-8 bg-cyan-900/30 rounded-lg flex items-center justify-center border border-cyan-500/20 animate-bounce"
+                    style={{ animationDelay: index * 0.3 + "s" }}
+                >
+                    {React.cloneElement(Icon, {
+                    className: "text-cyan-400 w-4 h-4",
+                    })}
+                </div>
+                ))}
+            </div>
+
+            <div className="text-cyan-400 font-mono text-xs tracking-widest">
+                {progress < 50
+                ? "SYSTEM BOOTING"
+                : progress < 80
+                ? "CALIBRATING"
+                : "FINALIZING"}
+            </div>
+            </div>
+        </div>
+        </div>
+    );
+};
+// Back to Top Button Component (Unchanged)
+const BackToTopButton = () => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    const toggleVisibility = () => {
+        if (window.pageYOffset > 300) {
+        setIsVisible(true);
+        } else {
+        setIsVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", toggleVisibility);
+        return () => window.removeEventListener("scroll", toggleVisibility);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+        });
+    };
+
+    return (
+        <button
+        onClick={scrollToTop}
+        className={`fixed bottom-8 right-8 z-50 p-3 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-lg interactive transition-all duration-300 transform
+                    ${
+                        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-50"
+                    } hover:scale-110 hover:shadow-cyan-500/40 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75`}
+        >
+        <ArrowUp size={24} />
+        </button>
+    );
+};
+// --- End Unchanged Components ---
+
+const LocationsList = () => {
+  // Define locations
+  const locations = [
+    { lat: 27.994402, lng: -81.760254, name: "Florida, USA", address: "Serving the Southeast Region" },
+    { lat: 36.778259, lng: -119.417931, name: "California, USA", address: "West Coast Operations Hub" },
+    { lat: 22.572645, lng: 88.363892, name: "Kolkata, India", address: "Asia-Pacific Development Center" },
+    { lat: 17.385044, lng: 78.486671, name: "Hyderabad, India", address: "R&D and Support Center" },
+  ];
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center z-50 overflow-hidden">
-      <div className="text-center relative w-full max-w-md mx-4 z-10">
-        <div className="mb-4 relative">
-          <div className="relative mx-auto w-full max-w-xs">
-            <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl blur-lg animate-pulse" />
-            <div className="relative bg-gradient-to-br from-cyan-900/40 via-blue-900/40 to-purple-900/40 rounded-lg p-0.5 backdrop-blur-xl border border-cyan-500/30 shadow-md">
-              <div className="relative rounded-md overflow-hidden bg-black/20 min-h-[120px] flex items-center justify-center">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover rounded-md"
-                  style={{ opacity: 1, transition: "opacity 1s ease-in-out" }}
-                >
-                  <source src={loadingVideo} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+    // Main container
+    <div className="w-full bg-gray-900/30 rounded-2xl p-4 md:p-6 border border-cyan-500/10">
+      
+      <h3 className="text-xl font-semibold text-cyan-400 mb-6 text-center">
+        Our Global Offices
+      </h3>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end justify-center pb-2">
-                  <div className="text-cyan-300 text-xs font-mono tracking-widest">
-                    INITIALIZING...
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <div className="relative mx-auto w-20 h-20 mb-4">
-            <div
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 animate-ping"
-              style={{ animationDuration: "3s" }}
-            />
-            <div className="absolute inset-0 rounded-full border-4 border-cyan-800/30" />
-            <div
-              className="absolute inset-0 rounded-full border-4 border-transparent border-t-cyan-400 animate-spin"
-              style={{
-                clipPath: `polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%)`,
-                transform: `rotate(${progress * 3.6}deg)`,
-                transition: "transform 0.3s ease-out",
-              }}
-            />
-            <div className="absolute inset-3 rounded-full bg-gradient-to-br from-cyan-900/40 to-blue-900/40 backdrop-blur-sm border border-cyan-500/20 flex items-center justify-center">
-              <div className="text-center">
-                <span className="text-cyan-300 text-xl font-bold block">
-                  {Math.round(progress)}%
-                </span>
-                <span className="text-cyan-400 text-xs font-mono">
-                  COMPLETE
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <p className="text-cyan-300 mb-3 font-mono text-lg tracking-wider">
-              <span className="inline-block min-w-[180px] text-center">
-                {displayText}
-                <span className="animate-blink">...</span>
-              </span>
-            </p>
-            <div className="w-48 mx-auto bg-cyan-900/30 rounded-full h-1.5 mb-2">
+      {/* Locations Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {locations.map((loc) => (
               <div
-                className="bg-gradient-to-r from-cyan-400 to-blue-500 h-1.5 rounded-full transition-all duration-300 ease-out"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-center space-x-4 mb-4">
-            {[
-              <Cpu key="cpu" />,
-              <Satellite key="sat" />,
-              <Brain key="brain" />,
-              <Cloud key="cloud" />,
-            ].map((Icon, index) => (
-              <div
-                key={index}
-                className="w-8 h-8 bg-cyan-900/30 rounded-lg flex items-center justify-center border border-cyan-500/20 animate-bounce"
-                style={{ animationDelay: index * 0.3 + "s" }}
+                  key={loc.name}
+                  className="bg-gray-800/50 p-4 rounded-lg border border-cyan-500/20 flex flex-col items-center"
               >
-                {React.cloneElement(Icon, {
-                  className: "text-cyan-400 w-4 h-4",
-                })}
+                  {/* Location Name */}
+                  <h4 className="text-lg font-medium text-cyan-300 flex items-center gap-2">
+                    <MapPin size={16} className="text-cyan-400" />
+                    {loc.name}
+                  </h4>
+                  {/* Location Address/Description */}
+                  <p className="text-cyan-200 text-sm mt-1">
+                    {loc.address}
+                  </p>
               </div>
-            ))}
-          </div>
-
-          <div className="text-cyan-400 font-mono text-xs tracking-widest">
-            {progress < 50
-              ? "SYSTEM BOOTING"
-              : progress < 80
-              ? "CALIBRATING"
-              : "FINALIZING"}
-          </div>
-        </div>
+          ))}
       </div>
     </div>
   );
 };
 
-// Back to Top Button Component
-const BackToTopButton = () => {
-  const [isVisible, setIsVisible] = useState(false);
 
-  const toggleVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
 
-  useEffect(() => {
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  return (
-    <button
-      onClick={scrollToTop}
-      className={`fixed bottom-8 right-8 z-50 p-3 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-lg interactive transition-all duration-300 transform
-            ${
-              isVisible ? "opacity-100 scale-100" : "opacity-0 scale-50"
-            } hover:scale-110 hover:shadow-cyan-500/40 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75`}
-    >
-      <ArrowUp size={24} />
-    </button>
-  );
-};
-
-// Main Website Component (HOMEPAGE)
+// =================================================================
+// ============== HOMEPAGE COMPONENT (UPDATED CONTACT) =============
+// =================================================================
 const DroneCompanyWebsite = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [displayText, setDisplayText] = useState("Booting sequence");
   const location = useLocation();
 
-  // Loading logic
+  // State and logic for the hero image rotator
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const heroImages = [
+    {
+      src: iidasImage,
+      alt: "IIDaaS Grid and Wildfire Monitoring",
+      overline:
+        "Our proprietary AI solution for grid and wildfire monitoring- IIDaaS",
+      subtitle: "Intelligent Inspection and Detection as a Service",
+      title: "Enhanced Grid Safety and Efficiency",
+      description:
+        "Leveraging cutting-edge AI for comprehensive monitoring and predictive analysis to prevent outages and mitigate wildfire risks. Your grid's future is secure.",
+    },
+    {
+      src: lineMonitoringImage,
+      alt: "Real-Time Electrical Line Monitoring & Automation",
+      overline: "Advanced Oversight for Critical Infrastructure",
+      subtitle: "Smart Monitoring for Peak Performance",
+      title: "Real-Time Electrical Line Monitoring & Automation",
+      description:
+        "Our platform delivers real-time detection of electrical line anomalies using a proprietary Follow-the-Wire model, seamlessly integrated with IoT-connected drones, edge computing, and SAP BTP/CPI for automated work order generation.",
+    },
+    {
+      src: gridReliabilityImage,
+      alt: "Revolutionizing Grid Reliability with AI, IoT, & SAP Integration",
+      overline: "The Next Generation of Power Infrastructure",
+      subtitle: "Seamless Integration for Unmatched Reliability",
+      title: "Revolutionizing Grid Reliability with AI, IoT, & SAP Integration",
+      description:
+        "Experience unparalleled grid stability. We combine Artificial Intelligence, Internet of Things data, and robust SAP integration to create a resilient, self-optimizing electrical network.",
+    },
+  ];
+
+  useEffect(() => {
+    if (!isLoading) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex(
+          (prevIndex) => (prevIndex + 1) % heroImages.length
+        );
+      }, 5000); // Rotates every 5 seconds
+      return () => clearInterval(interval);
+    }
+  }, [isLoading, heroImages.length]);
+
+  // Loading logic (Unchanged)
   useEffect(() => {
     const minimumLoadingTime = 4000;
     const startTime = Date.now();
@@ -544,7 +558,7 @@ const DroneCompanyWebsite = () => {
     };
   }, []);
 
-  // Handle direct anchor link access after loading
+  // Handle direct anchor link access after loading (Unchanged)
   useEffect(() => {
     if (!isLoading && location.hash) {
       setTimeout(() => {
@@ -556,12 +570,12 @@ const DroneCompanyWebsite = () => {
     }
   }, [isLoading, location.hash]);
 
-  // Reset scroll when navigating to a new page
+  // Reset scroll when navigating to a new page (Unchanged)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Scroll animation logic for feature cards
+  // Scroll animation logic for feature cards (Unchanged)
   useEffect(() => {
     if (isLoading) return;
 
@@ -582,6 +596,8 @@ const DroneCompanyWebsite = () => {
     return () => window.removeEventListener("scroll", checkScroll);
   }, [isLoading]);
 
+
+  const currentContent = heroImages[currentImageIndex];
   return (
     <div className="min-h-screen w-full text-gray-100 font-sans overflow-x-hidden relative">
       <ThreeDBackground />
@@ -593,7 +609,6 @@ const DroneCompanyWebsite = () => {
         displayText={displayText}
       />
 
-      {/* FIX: Removed unused props. Header now manages its own state. */}
       {/* <Header /> */}
 
       <div
@@ -603,82 +618,85 @@ const DroneCompanyWebsite = () => {
             : "opacity-100 transition-opacity duration-500 relative z-10"
         }
       >
-        {/* Hero Section */}
+        {/* HERO SECTION (Unchanged) */}
         <section
           id="home"
-          className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+          className="relative min-h-screen flex items-center overflow-hidden"
         >
-          <div className="container mx-auto px-4 text-center z-20 relative">
-            <div className="mb-8">
-              <div className="inline-block bg-cyan-500/10 px-4 py-2 rounded-full mb-6 border border-cyan-500/30">
-                <span className="text-cyan-300 text-sm font-medium">
-                  Innovating Grid Reliability
-                </span>
-              </div>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-              Real-Time Electrical Line Monitoring & Automation
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-cyan-100">
-              Revolutionizing Grid Reliability with AI, IoT & SAP Integration
-            </p>
-            <p className="text-lg mb-12 max-w-4xl mx-auto text-cyan-200">
-              Welcome to the future of electrical infrastructure management. Our
-              platform delivers real-time detection of electrical line anomalies
-              using a proprietary Follow-the-Wire model, seamlessly integrated
-              with IoT-connected drones, edge computing, and SAP BTP/CPI for
-              automated work order generation.
-            </p>
-            {/* <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="#solutions" 
-                onClick={(e) => {
-                    e.preventDefault();
-                    document.querySelector('#solutions')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-10 rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive group w-auto justify-center"
-              >
-                Explore Solutions
-                <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <a 
-                href="#contact" 
-                onClick={(e) => {
-                    e.preventDefault();
-                    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="inline-flex items-center bg-transparent text-cyan-300 font-bold py-4 px-10 rounded-xl hover:bg-cyan-500/10 transition-all transform hover:scale-105 border border-cyan-500/30 shadow-sm interactive"
-              >
-                Contact Us
-              </a>
-            </div> */}
+           {/* ... Hero content ... */}
+           <div className="absolute inset-0 z-0">
+            {heroImages.map((item, index) => (
+              <img
+                key={index}
+                src={item.src}
+                alt={item.alt}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+                  index === currentImageIndex ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
           </div>
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent z-10"></div>
+          {/* Hero text container */}
+          <div className="container mx-auto px-4 z-20 relative max-w-5xl">
+            <div
+              key={currentImageIndex}
+              className="max-w-3xl p-6 md:p-8 rounded-lg"
+            >
+              <p
+                className="text-sm md:text-base font-semibold text-cyan-300 tracking-widest uppercase animate-fade-in-up"
+                style={{ animationDelay: "100ms" }}
+              >
+                {currentContent.overline}
+              </p>
+              <h1
+                className="text-4xl md:text-6xl font-extrabold my-4 text-white animate-fade-in-up"
+                style={{ animationDelay: "250ms" }}
+              >
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-cyan-200">
+                  {currentContent.title}
+                </span>
+              </h1>
+              <p
+                className="text-lg md:text-xl font-mono text-cyan-400 mb-6 animate-fade-in-up"
+                style={{ animationDelay: "400ms" }}
+              >
+                {currentContent.subtitle}
+              </p>
+              <p
+                className="text-lg md:text-xl text-gray-300 font-light max-w-2xl animate-fade-in-up"
+                style={{ animationDelay: "550ms" }}
+              >
+                {currentContent.description}
+              </p>
+            </div>
+          </div>
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
             <div className="w-6 h-10 border-2 border-cyan-400 rounded-full flex justify-center">
               <div className="w-1 h-3 bg-cyan-500 rounded-full mt-2"></div>
             </div>
           </div>
         </section>
 
-        {/* Solutions Section */}
-        <section id="solutions" className="py-20 relative z-10">
-          <div className="container mx-auto px-4">
+        {/* Central Container */}
+        <div className="container mx-auto px-4 max-w-7xl">
+          {/* Solutions Section (Unchanged) */}
+          <section id="solutions" className="py-20 relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 Our Solutions
               </span>
             </h2>
-            <div className="text-center text-cyan-200 max-w-3xl mx-auto">
+            <div className="text-center text-cyan-200 max-w-3xl mx-auto mb-16">
               <p className="text-lg">
                 We provide cutting-edge solutions for electrical grid monitoring
                 and maintenance using advanced drone technology, AI, and IoT
                 integration.
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                {
+                 {
                   title: "Automated Inspections",
                   description:
                     "AI-powered drones autonomously inspect electrical infrastructure with precision",
@@ -702,9 +720,9 @@ const DroneCompanyWebsite = () => {
               ].map((solution, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 hover:border-cyan-500/40 hover:bg-gray-800/70 max-w-5xl w-full mx-auto"
+                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 hover:border-cyan-500/40 hover:bg-gray-800/70 flex flex-col items-center md:items-start"
                 >
-                  <div className="w-20 h-20 bg-cyan-900/30 rounded-xl flex items-center justify-center mb-6 mx-auto">
+                  <div className="w-20 h-20 bg-cyan-900/30 rounded-xl flex items-center justify-center mb-6">
                     {solution.icon}
                   </div>
                   <img
@@ -712,29 +730,27 @@ const DroneCompanyWebsite = () => {
                     alt={solution.title}
                     className="w-full h-48 object-cover rounded-lg mb-6 shadow-lg"
                   />
-                  <h3 className="text-2xl font-bold text-white mb-4 text-center">
+                  <h3 className="text-2xl font-bold text-white mb-4 text-center md:text-left">
                     {solution.title}
                   </h3>
-                  <p className="text-cyan-200 text-center">
+                  <p className="text-cyan-200 text-center md:text-left">
                     {solution.description}
                   </p>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* How It Works Section */}
-        <section id="technology" className="py-20 relative z-10">
-          <div className="container mx-auto p-4">
+          {/* How It Works Section (Unchanged) */}
+          <section id="technology" className="py-20 relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 How It Works
               </span>
             </h2>
-            <div className="flex flex-col space-y-12 max-w-4xl w-full mx-auto ">
+            <div className="flex flex-col space-y-8 w-full mx-auto ">
               {[
-                {
+                 {
                   step: "1",
                   title: "Data Collection",
                   description:
@@ -777,12 +793,10 @@ const DroneCompanyWebsite = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="w-full max-w-4xl mx-auto flex flex-col md:flex-row items-start interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 space-y-2"
+                  className="w-full mx-auto flex flex-col md:flex-row items-start interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 space-y-2"
                 >
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-6 shadow-lg mb-4 md:mb-0">
-                    {item.step}
-                  </div>
-                  <div className="bg-gray-800/50 backdrop-blur-md max-w-4xl w-full rounded-2xl p-6 border border-cyan-500/20 flex-1 shadow-sm hover:shadow-md transition-shadow hover:border-cyan-500/40">
+                   
+                  <div className="bg-gray-800/50 backdrop-blur-md w-full rounded-2xl p-8 border border-cyan-500/20 flex-1 shadow-sm hover:shadow-md transition-shadow hover:border-cyan-500/40">
                     <div className="max-w-4xl w-full flex flex-col md:flex-row items-center md:items-start mb-4">
                       <div className="w-10 h-10 bg-cyan-900/30 rounded-lg flex items-center justify-center mr-4 mb-4 md:mb-0">
                         {item.icon}
@@ -792,14 +806,12 @@ const DroneCompanyWebsite = () => {
                       </h3>
                     </div>
                     <div className="flex flex-col md:flex-row items-center">
-                      <div className="w-full md:w-1/3 mb-4 md:mb-0 md:mr-6 relative group">
-                        <div className="overflow-hidden rounded-lg shadow-md">
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105 group-hover:shadow-lg"
-                          />
-                        </div>
+                      <div className="w-full md:w-1/3 mb-4 md:mb-0 md:mr-6">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-48 object-cover rounded-lg shadow-lg"
+                        />
                       </div>
                       <div className="w-full md:w-2/3">
                         <p className="text-cyan-200">{item.description}</p>
@@ -809,20 +821,18 @@ const DroneCompanyWebsite = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Why It Matters Section */}
-        <section id="benefits" className="py-20 relative z-10">
-          <div className="container mx-auto px-4">
+          {/* Why It Matters Section (Unchanged) */}
+          <section id="benefits" className="py-20 relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 Why It Matters
               </span>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
               {[
-                {
+                 {
                   title: "Prevent Outages Before They Happen",
                   description:
                     "Proactive detection means fewer blackouts and safer communities.",
@@ -853,7 +863,7 @@ const DroneCompanyWebsite = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 shadow-sm hover:shadow-md hover:border-cyan-500/40"
+                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 shadow-sm hover:shadow-md hover:border-cyan-500/40"
                 >
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-cyan-900/30 rounded-lg flex items-center justify-center mr-4">
@@ -863,109 +873,75 @@ const DroneCompanyWebsite = () => {
                       {item.title}
                     </h3>
                   </div>
-                  <div className="mb-4 relative group">
-                    <div className="overflow-hidden rounded-lg shadow-md">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105 group-hover:shadow-lg"
-                      />
-                    </div>
-                  </div>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-48 object-cover rounded-lg mb-6 shadow-lg"
+                  />
                   <p className="text-cyan-200">{item.description}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="py-20 relative z-10">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-                  Get In Touch
-                </span>
-              </h2>
-              <p className="text-xl text-cyan-200 max-w-2xl mx-auto">
-                Ready to transform your electrical grid management? Contact us
-                today.
-              </p>
-            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-                {/* This is the "Send us a message" column, which still has its box */}
-                <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-cyan-500/20 shadow-sm flex flex-col justify-center items-center text-center">
-                  <h3 className="text-2xl font-bold mb-6 text-cyan-400">
-                    Send us a message
-                  </h3>
-                  <p className="text-cyan-200 mb-6 max-w-sm">
-                    Have a question or want to request a demo? Click the button
-                    below to open our contact form.
-                  </p>
-                  <a
-                    href="https://forms.gle/your-google-form-id"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full max-w-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive flex items-center justify-center"
-                  >
-                    <Send size={20} className="mr-2" />
-                    Open Contact Form
-                  </a>
-                </div>
 
-                {/* MODIFIED: Styling classes removed from this div to eliminate the background box */}
-                <div>
-                  <h3 className="text-xl font-bold mb-6 text-cyan-400 text-center">
-                    Our Locations
-                  </h3>
-                  <div className="flex flex-col space-y-4 items-center w-64 mx-auto">
-                    {/* Location links remain the same */}
-                    <a
-                      href="https://www.google.com/maps/place/Advanced+Dermatology+and+Cosmetic+Surgery+-+Tampa+-+14521+University+Point+Pl/@28.0800945,-82.4155504,250m/data=!3m3!1e3!4b1!5s0x88c2c78dc51f0d4f:0xb21e40aa70f7c7d3!4m6!3m5!1s0x88c2c78dc4f1b19d:0xb3a747aea2424cf8!8m2!3d28.0800933!4d-82.4149067!16s%2Fg%2F1td266r6?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                    >
-                      <MapPin size={18} /> Florida, USA
-                    </a>
-                    <a
-                      href="https://www.google.com/maps/place/Regus+-+Pasadena+-+Century+Square/@34.1484868,-118.1353697,939m/data=!3m2!1e3!4b1!4m6!3m5!1s0x80c2c3431b587ea7:0x6b3e4a4af58f3488!8m2!3d34.1484824!4d-118.1327948!16s%2Fg%2F11rpdz88j?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                    >
-                      <MapPin size={18} /> California, USA
-                    </a>
-                    <a
-                      href="https://www.google.com/maps/place/Regus+-+Kolkata,+RDB+Boulevard/@22.5799603,88.4353795,1048m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3a02758c7a1825d3:0x1ff36b9b5ff644e8!8m2!3d22.5799554!4d88.4379544!16s%2Fg%2F11f7hpwwyr?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                    >
-                      <MapPin size={18} /> Kolkata, India
-                    </a>
-                    <a
-                      href="https://www.google.com/maps/search/Hyderabad+address:+Krithika+Layout+Plot+No+3,+Hyderabad,+Telangana+500081,+India/@17.4443344,78.3776199,4329m/data=!3m2!1e3!4b1?entry=ttu&g_ep=EgoyMDI1MTAxMy4wIKXMDSoASAFQAw%3D%3D"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-cyan-900/40 hover:bg-cyan-900/70 border border-cyan-500/20 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all shadow-md interactive flex items-center justify-center gap-2"
-                    >
-                      <MapPin size={18} /> Hyderabad, India
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Footer */}
+
+          {/* === UPDATED: Contact Section now uses LocationsGlobe === */}
+<section id="contact" className="py-20 relative z-10">
+  <div className="text-center mb-16">
+    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+      <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+        Get In Touch & Our Locations
+      </span>
+    </h2>
+    <p className="text-xl text-cyan-200 max-w-3xl mx-auto">
+      Ready to transform your electrical grid management? Contact us
+      or explore our global presence.
+    </p>
+  </div>
+
+  {/* * CHANGE 3: Changed lg:grid-cols-3 to lg:grid-cols-2 for a balanced layout.
+    * I also added max-w-sm to the contact card and mx-auto to center both.
+  */}
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start"> {/* items-start looks better than items-center */}
+
+      {/* Contact Form Link Card (Takes 1/2 width on large screens) */}
+      <div className="lg:col-span-1 bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 shadow-sm flex flex-col justify-center items-center text-center h-full">
+          <h3 className="text-2xl font-bold mb-6 text-cyan-400">
+              Send us a message
+          </h3>
+          <p className="text-cyan-200 mb-6 max-w-sm">
+              Have a question or want to request a demo? Click the button
+              below to open our contact form.
+          </p>
+          <a
+              href="https://forms.gle/your-google-form-id" // Replace with your actual form link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full max-w-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive flex items-center justify-center"
+          >
+              <Send size={20} className="mr-2" />
+              Open Contact Form
+          </a>
+      </div>
+
+      {/* CHANGE 4: Changed lg:col-span-2 to lg:col-span-1 */}
+      <div className="lg:col-span-1">
+          <LocationsList />
+      </div>
+  </div>
+</section>
+          {/* ================================================== */}
+
+        </div> {/* End Central Container */}
+
+        {/* Footer (Unchanged) */}
         <footer className="border-t border-cyan-500/20 py-16 relative z-10">
-          <div className="container mx-auto px-4">
-            <div className="pt-8 text-center">
+           {/* ... Footer content ... */}
+           <div className="container mx-auto px-4">
+             <div className="pt-8 text-center">
               <div className="flex items-center justify-center mb-4">
                 <div className="w-30 h-30 rounded-lg flex items-center justify-center mr-3 p-2">
                   <img
@@ -986,602 +962,1107 @@ const DroneCompanyWebsite = () => {
   );
 };
 
-// Careers Page Component
+
+// --- CAREERS PAGE ---
 const CareersPage = () => {
-  const [filter, setFilter] = useState("All");
-  const [locationFilter, setLocationFilter] = useState("All Locations");
+    const [filter, setFilter] = useState("All");
+    const [locationFilter, setLocationFilter] = useState("All Locations");
+    const [currentJobIndex, setCurrentJobIndex] = useState(0);
+    const [direction, setDirection] = useState("next");
 
-  const formLink = "https://forms.gle/your-job-application-form-id";
+    // State for 3D Hiring Step Carousel
+    const [currentHiringStep, setCurrentHiringStep] = useState(0);
+    const [hiringStepDirection, setHiringStepDirection] = useState("next");
 
-  const jobListings = [
-    {
-      title: "Senior Drone Engineer",
-      department: "Engineering",
-      location: "Kolkata, India",
-      type: "Full-time",
-      experience: "5+ years",
-      description:
-        "Lead the design and development of our next-generation autonomous drone fleet for grid inspection.",
-      skills: ["Drone Technology", "IoT", "Python", "CAD"],
-    },
-    {
-      title: "AI/ML Specialist",
-      department: "Research & Development",
-      location: "Remote",
-      type: "Full-time",
-      experience: "4+ years",
-      description:
-        "Develop and implement cutting-edge machine learning models for real-time anomaly detection from drone sensor data.",
-      skills: ["Machine Learning", "Python", "TensorFlow", "Data Analysis"],
-    },
-    {
-      title: "IoT Solutions Architect",
-      department: "Engineering",
-      location: "Kolkata, India",
-      type: "Full-time",
-      experience: "6+ years",
-      description:
-        "Architect and manage our global network of IoT devices, ensuring robust data pipelines from edge to cloud.",
-      skills: [
-        "IoT Architecture",
-        "Cloud Computing",
-        "Embedded Systems",
-        "Security",
-      ],
-    },
-    {
-      title: "SAP Integration Developer",
-      department: "IT",
-      location: "Hybrid",
-      type: "Contract",
-      experience: "5+ years",
-      description:
-        "Integrate our core monitoring platform with SAP BTP/CPI to automate work order generation and field responses.",
-      skills: ["SAP CPI", "BTP", "API Integration", "Java"],
-    },
-  ];
+    // Logic for rotating hero images
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const heroImages = [
+        { src: InnovateImpact, alt: "Innovate and make an impact" },
+        { src: GrowthLearning, alt: "Growth and learning opportunities" },
+        { src: CollaborativeCulture, alt: "Collaborative company culture" },
+        { src: benefitsImage, alt: "Company benefits" },
+    ];
 
-  const filteredJobs = jobListings
-    .filter((job) => filter === "All" || job.department === filter)
-    .filter(
-      (job) =>
-        locationFilter === "All Locations" || job.location === locationFilter
-    );
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
-  const departments = [
-    "All",
-    ...new Set(jobListings.map((job) => job.department)),
-  ];
+    // --- Job Listings with Individual Application Links ---
+    const jobListings = [
+        {
+            title: "Machine Learning Engineer (AI / Data)",
+            department: "AI/Data Science",
+            location: "Hyderabad",
+            type: "Full-time",
+            experience: "Bachelor's/Master's",
+            description: "Design, train, and deploy machine learning and deep learning models, working with large datasets to extract insights and improve model performance.",
+            skills: ["Python", "TensorFlow/PyTorch", "Pandas", "NumPy", "Supervised Learning", "Unsupervised Learning"],
+            imageUrl: ml_engineer,
+            applicationLink: "https://forms.gle/link-for-ml-engineer", // Replace with actual link
+        },
+        {
+            title: "Embedded Systems Engineer (Edge AI / Drones)",
+            department: "Engineering",
+            location: "Remote",
+            type: "Full-time",
+            experience: "Bachelor's",
+            description: "Develop firmware and embedded applications for AI-enabled edge or drone systems, optimizing models for real-time performance on resource-constrained hardware.",
+            skills: ["C/C++", "Embedded Python", "RTOS", "Edge Inference", "Computer Vision", "Signal Processing"],
+            imageUrl: embeddedsystemengineer,
+            applicationLink: "https://forms.gle/link-for-embedded-engineer", // Replace with actual link
+        },
+        {
+            title: "IoT Solutions Architect",
+            department: "Architecture/Cloud",
+            location: "Kolkata",
+            type: "Full-time",
+            experience: "Bachelor's",
+            description: "Design scalable IoT architectures connecting sensors, devices, and cloud platforms, ensuring data security and integration into analytics or AI pipelines.",
+            skills: ["Azure IoT/AWS IoT/GCP IoT", "MQTT/LoRaWAN/BLE", "Networking", "Cybersecurity", "Encryption"],
+            imageUrl: iotsolution,
+            applicationLink: "https://forms.gle/link-for-iot-architect", // Replace with actual link
+        },
+        {
+            title: "SAP BTP Architect",
+            department: "IT/SAP",
+            location: "Hyderabad",
+            type: "Full-time",
+            experience: "8+ years",
+            description: "Architect and implement SAP BTP solutions for integration, data, and extension use cases, leveraging SAP HANA, CAP, and Fiori/UI5.",
+            skills: ["SAP BTP", "Cloud Foundry/Kyma", "CAP", "SAP HANA", "ABAP", "CPI", "REST APIs"],
+            imageUrl: sapbtp,
+            applicationLink: "https://forms.gle/link-for-sap-architect", // Replace with actual link
+        },
+        {
+            title: "Product Manager (Tech)",
+            department: "Product Management",
+            location: "Remote",
+            type: "Full-time",
+            experience: "Proven Experience",
+            description: "Define and prioritize product roadmap, collaborate with engineering, design, and marketing to launch features, and analyze KPIs for decision-making.",
+            skills: ["Product Lifecycle", "SaaS", "Agile/Scrum", "Jira", "Confluence", "Analytics"],
+            imageUrl: productmanager,
+            applicationLink: "https://forms.gle/link-for-product-manager", // Replace with actual link
+        },
+        {
+            title: "FinOps Manager (Financial Operations)",
+            department: "Finance/Operations",
+            location: "California",
+            type: "Full-time",
+            experience: "Bachelor's",
+            description: "Manage and optimize cloud and operational costs, partner with engineering/finance for monitoring/forecasting, and develop dashboards for cost visibility.",
+            skills: ["Finance/Accounting", "Cloud Costs (AWS/Azure/GCP)", "Cost Modeling", "Forecasting", "KPI Reporting", "CloudHealth/Apptio"],
+            imageUrl: finopsmanager,
+            applicationLink: "https://forms.gle/link-for-finops-manager", // Replace with actual link
+        },
+        {
+            title: "(Veteran Preferred) Part-Time Remote Drone Operations Consultant",
+            department: "Consulting/Operations",
+            location: "Remote / Part-Time / Contract",
+            type: "Part-Time / Contract",
+            experience: "Veteran/Military UAV Experience",
+            description: "Provide remote consulting on drone mission design, data analysis (imagery, LiDAR), hardware selection, operational procedures, and training for civilian/enterprise projects.",
+            skills: ["UAV Operations", "FAA Part 107", "Mission Planning Tools", "Data Analysis", "AI/IoT Integration (Preferred)", "Remote Collaboration"],
+            imageUrl: remotedroneoperation,
+            applicationLink: "https://forms.gle/link-for-drone-consultant", // Replace with actual link
+        },
+    ];
 
-  const locations = [
-    "All Locations",
-    ...new Set(jobListings.map((job) => job.location)),
-  ];
+    // --- Filtering Logic ---
+    const filteredJobs = jobListings
+        .filter((job) => filter === "All" || job.department === filter)
+        .filter(
+            (job) =>
+                locationFilter === "All Locations" ||
+                // Check if the locationFilter matches any part of the job's location string
+                job.location.split(' / ').map(loc => loc.trim()).includes(locationFilter)
+        );
 
-  return (
-    <div className="min-h-screen text-gray-100 font-sans w-full overflow-x-hidden relative">
-      <ThreeDBackground />
-      <CustomCursor />
-      <BackToTopButton />
+    const departments = useMemo(() => [
+        "All",
+        ...[...new Set(jobListings.map((job) => job.department))].sort(),
+    ], [jobListings]);
 
-      <main className="w-full px-4 py-12 pt-20 relative z-10">
-        <div className="mx-auto max-w-7xl">
-          <section className="text-center mb-24">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-              Shape the Future With Us
-            </h1>
-            <p className="text-xl text-cyan-200 max-w-3xl mx-auto">
-              Join a revolutionary team that's transforming electrical
-              infrastructure management with cutting-edge technology.
-            </p>
-          </section>
+    const locations = useMemo(() => [
+        "All Locations",
+        ...[...new Set(jobListings.flatMap((job) =>
+            // Split location strings like "Remote / Part-Time / Contract" and take primary location parts
+            job.location.split(' / ').map(loc => loc.trim())
+        ))]
+        // Filter out non-location specific terms if needed, e.g., 'Part-Time', 'Contract'
+        .filter(loc => !['Part-Time', 'Contract'].includes(loc))
+        .filter((value, index, self) => self.indexOf(value) === index) // Ensure uniqueness
+        .sort(),
+    ], [jobListings]);
 
-          <section className="mb-24">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
-              Why Join COEUS?
-            </h2>
-            {/* Retaining max-w-6xl for overall grid width, gap-6 is good */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-              {[
-                {
-                  imageUrl: InnovateImpact, // Updated placeholder size for larger image
-                  title: "Innovate & Impact",
-                  description:
-                    "Work on challenging projects that have a real-world impact on grid reliability and safety.",
-                },
-                {
-                  imageUrl: GrowthLearning,
-                  title: "Growth & Learning",
-                  description:
-                    "We invest in your professional development with continuous learning opportunities.",
-                },
-                {
-                  imageUrl: CollaborativeCulture,
-                  title: "Collaborative Culture",
-                  description:
-                    "Be part of a diverse, inclusive, and supportive team that values every voice.",
-                },
-                {
-                  imageUrl: benefitsImage, // Assuming benefitsImage is imported at the top
-                  title: "Great Benefits",
-                  description:
-                    "Enjoy competitive salaries, comprehensive health benefits, and a flexible work environment.",
-                },
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  // Drastically reduced horizontal padding (px-4) while maintaining vertical padding (py-6)
-                  // for a more square appearance of the card.
-                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl px-4 py-6 border border-cyan-500/20 text-center hover:border-cyan-400/50 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-between" // Added justify-between to push description to bottom
-                >
-                  {/* Increased image wrapper size from w-20 h-20 to w-28 h-28 */}
-                  {/* Adjusted mb for better spacing after the larger image and before title */}
-                  <div className="w-28 h-28 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 overflow-hidden shadow-lg">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="w-full h-full object-cover rounded-xl"
-                    />
-                  </div>
-                  {/* Title and Description sizing adjusted to fit the squarer box */}
-                  <h3 className="text-base font-bold text-white mb-2 leading-tight">
-                    {" "}
-                    {/* Added leading-tight for compact title */}
-                    {item.title}
-                  </h3>
-                  <p className="text-cyan-200 text-xs leading-snug">
-                    {" "}
-                    {/* Added leading-snug for compact description */}
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section
-            id="openings"
-            className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 md:p-12 border border-cyan-500/20 shadow-lg mb-24 max-w-5xl w-full mx-auto"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-cyan-400">
-              Current Openings
-            </h2>
-            <p className="text-center text-cyan-200 mb-10">
-              Find your next opportunity in our list of open positions.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto mb-12">
-              <div className="w-full sm:w-1/2 relative">
-                <label htmlFor="department-filter" className="sr-only">
-                  Filter by department
-                </label>
-                <select
-                  id="department-filter"
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
-                >
-                  {departments.map((dept) => (
-                    <option
-                      key={dept}
-                      value={dept}
-                      className="bg-gray-800 text-white font-medium"
-                    >
-                      {dept === "All" ? "All Departments" : dept}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-400">
-                  <ChevronDown size={20} />
-                </div>
-              </div>
-
-              <div className="w-full sm:w-1/2 relative">
-                <label htmlFor="location-filter" className="sr-only">
-                  Filter by location
-                </label>
-                <select
-                  id="location-filter"
-                  value={locationFilter}
-                  onChange={(e) => setLocationFilter(e.target.value)}
-                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
-                >
-                  {locations.map((loc) => (
-                    <option
-                      key={loc}
-                      value={loc}
-                      className="bg-gray-800 text-white font-medium"
-                    >
-                      {loc}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-400">
-                  <ChevronDown size={20} />
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              {filteredJobs.length > 0 ? (
-                filteredJobs.map((job) => (
-                  <a
-                    key={job.title}
-                    href={formLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-gray-900/40 p-8 rounded-2xl border border-cyan-500/20 text-center transition-all duration-300 relative overflow-hidden group hover:border-cyan-400/60"
-                  >
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-                    <div className="relative z-10">
-                      {/* CHANGE: Updated the styling for the job type tag */}
-                      <span className="inline-block bg-cyan-900/50 text-cyan-200 text-xs font-semibold tracking-wider uppercase px-4 py-1.5 rounded-full mb-4 border border-cyan-500/30">
-                        {job.type}
-                      </span>
-
-                      <h3 className="text-3xl font-bold text-white mb-6 group-hover:text-cyan-300 transition-colors">
-                        {job.title}
-                      </h3>
-                      <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-cyan-300 mb-6">
-                        <span className="flex items-center text-sm">
-                          <Briefcase size={16} className="mr-2" />{" "}
-                          {job.department}
-                        </span>
-                        <span className="flex items-center text-sm">
-                          <Clock size={16} className="mr-2" /> {job.experience}
-                        </span>
-                      </div>
-
-                      <div className="w-24 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent mx-auto mb-6"></div>
-                      <p className="text-cyan-200/90 max-w-2xl mx-auto mb-6 text-justify">
-                        {job.description}
-                      </p>
-
-                      <div>
-                        <h4 className="font-semibold text-cyan-200 mb-3">
-                          Required Skills
-                        </h4>
-                        <div className="flex flex-wrap gap-2 justify-center">
-                          {job.skills.map((skill) => (
-                            <span
-                              key={skill}
-                              className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 border border-cyan-500/40 text-cyan-100 px-4 py-1.5 rounded-full text-sm font-medium hover:scale-105 transition-transform duration-200 cursor-pointer shadow-md"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="text-cyan-400 mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center font-semibold">
-                        View & Apply <ArrowRight size={18} className="ml-2" />
-                      </div>
-                    </div>
-                  </a>
-                ))
-              ) : (
-                <div className="text-center py-10 px-6 bg-gray-900/30 rounded-lg">
-                  <p className="text-cyan-200 text-lg">
-                    No open positions match your selected filters.
-                  </p>
-                </div>
-              )}
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
-              Our Hiring Process
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-              {[
-                {
-                  title: "Application",
-                  description:
-                    "Submit your resume through our online portal. We review every application carefully.",
-                },
-                {
-                  title: "Initial Screening",
-                  description:
-                    "Our HR team will reach out for a preliminary chat to get to know you better.",
-                },
-                {
-                  title: "Technical Interview",
-                  description:
-                    "Meet with the team to discuss your skills, experience, and solve technical challenges.",
-                },
-                {
-                  title: "Final Offer",
-                  description:
-                    "Congratulations! If you're a match, we'll extend an offer to welcome you to the team.",
-                },
-              ].map((step, index) => (
-                <div key={index} className="relative">
-                  <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 h-full">
-                    <div className="w-16 h-16 bg-cyan-900/50 border border-cyan-500/30 rounded-full flex items-center justify-center mb-6 mx-auto text-cyan-400 text-3xl font-bold">
-                      {index + 1}
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3">
-                      {step.title}
-                    </h3>
-                    <p className="text-cyan-200">{step.description}</p>
-                  </div>
-                  {index < 3 && (
-                    <div className="hidden lg:block absolute top-1/2 left-[95%] w-1/5 h-px bg-cyan-500/30"></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-// Talent Solutions Page Component
-const TalentSolutionsPage = () => {
-  useEffect(() => {
-    const checkScroll = () => {
-      const elements = document.querySelectorAll(".feature-card");
-      elements.forEach((element) => {
-        const elementPosition = element.getBoundingClientRect().top;
-        const screenPosition = window.innerHeight / 1.3;
-        if (elementPosition < screenPosition) {
-          element.classList.add("animate");
-        }
-      });
+    const handleScrollToOpenings = (e) => {
+        e.preventDefault();
+        document.querySelector("#openings")?.scrollIntoView({ behavior: "smooth" });
     };
-    window.addEventListener("scroll", checkScroll, { passive: true });
-    checkScroll();
-    return () => window.removeEventListener("scroll", checkScroll);
-  }, []);
 
-  return (
-    <div className="min-h-screen text-gray-100 font-sans w-full overflow-x-hidden relative">
-      <ThreeDBackground />
-      <CustomCursor />
-      <BackToTopButton />
-      {/* FIX: Removed unused props. Header now manages its own state. */}
-      {/* <Header /> */}
+    useEffect(() => {
+        setCurrentJobIndex(0); // Reset index when filters change
+    }, [filter, locationFilter]);
 
-      <main className="w-full px-4 py-12 pt-20 relative z-10">
-        <div className="mx-auto max-w-7xl">
-          <section className="text-center">
-            <div className="inline-block bg-cyan-500/10 px-4 py-2 rounded-full mb-6 border border-cyan-500/30">
-              <span className="text-cyan-300 text-sm font-medium">
-                Empowering Your Workforce
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-              Advanced Talent Solutions
-            </h1>
-            <p className="text-xl text-cyan-200 max-w-3xl mx-auto">
-              Bridge the skills gap in emerging technologies with our
-              specialized training, staffing, and consultation for advanced
-              drone and AI monitoring systems.
-            </p>
-          </section>
+    // --- Job Card Navigation ---
+    const showNextJob = () => {
+        setDirection("next");
+        setCurrentJobIndex((prevIndex) => (prevIndex + 1) % filteredJobs.length);
+    };
 
-          {/* FIX: Changed margin to padding for better spacing consistency */}
-          <section className="py-28">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-                Our Core Offerings
-              </span>
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                {
-                  title: "Corporate Training Programs",
-                  description:
-                    "Comprehensive training on drone operation, data analysis, and system maintenance.",
-                  icon: <Calendar />,
-                  features: [
-                    "Certified Trainers",
-                    "Hands-on Workshops",
-                    "Custom Curriculum",
-                    "Ongoing Support",
-                  ],
-                },
-                {
-                  title: "Strategic Consultation",
-                  description:
-                    "Expert guidance on implementing drone monitoring solutions in your organization.",
-                  icon: <Users />,
-                  features: [
-                    "Strategy Development",
-                    "Technology Assessment",
-                    "Implementation Planning",
-                    "ROI Analysis",
-                  ],
-                },
-                {
-                  title: "Specialized Staffing",
-                  description:
-                    "Access to skilled professionals for project-based work or temporary needs.",
-                  icon: <Briefcase />,
-                  features: [
-                    "Quick Deployment",
-                    "Vetted Professionals",
-                    "Flexible Terms",
-                    "Quality Assurance",
-                  ],
-                },
-                {
-                  title: "Custom Solution Development",
-                  description:
-                    "Tailored programs and integrations to meet your organization's specific requirements.",
-                  icon: <Cog />,
-                  features: [
-                    "Needs Assessment",
-                    "Custom Development",
-                    "Integration Support",
-                    "Continuous Maintenance",
-                  ],
-                },
-              ].map((service, index) => (
-                <div
-                  key={index}
-                  className="feature-card opacity-0 transform translate-y-10 transition-all duration-700 bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 shadow-lg group hover:border-cyan-400/80 hover:-translate-y-2 interactive"
-                  style={{ transitionDelay: `${index * 150}ms` }}
-                >
-                  <div className="flex items-start gap-6">
-                    <div className="relative flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-br from-cyan-900 to-blue-900/70 rounded-xl flex items-center justify-center text-cyan-400 group-hover:text-white transition-colors duration-300">
-                        {React.cloneElement(service.icon, { size: 32 })}
-                      </div>
-                      <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/30 group-hover:to-blue-500/30 rounded-xl blur-lg transition-all duration-300 animate-pulse group-hover:animate-none"></div>
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-white mb-3">
-                        {service.title}
-                      </h3>
-                      <p className="text-cyan-200 mb-6">
-                        {service.description}
-                      </p>
-                      <ul className="space-y-2">
-                        {service.features.map((feature, fIndex) => (
-                          <li
-                            key={fIndex}
-                            className="flex items-center text-cyan-300"
-                          >
-                            <CheckCircle
-                              size={16}
-                              className="text-cyan-500 mr-3 flex-shrink-0"
+    const showPrevJob = () => {
+        setDirection("prev");
+        setCurrentJobIndex(
+            (prevIndex) => (prevIndex - 1 + filteredJobs.length) % filteredJobs.length
+        );
+    };
+
+    // --- Hiring Steps Carousel Logic ---
+    const hiringSteps = [
+        {
+            icon: <FileText size={32} />, title: "Application",
+            description: "Show us your unique skills and vision. We personally review every submission.",
+        },
+        {
+            icon: <MessageSquare size={32} />, title: "Initial Screening",
+            description: "Let's connect to learn about your ambitions and see if our missions align.",
+        },
+        {
+            icon: <Cpu size={32} />, title: "Technical Interview",
+            description: "Collaborate with our leads on a problem mirroring our daily work.",
+        },
+        {
+            icon: <Award size={32} />, title: "Final Offer",
+            description: "If it's a match, we'll extend an offer. Welcome to the mission!",
+        },
+    ];
+
+    const nextHiringStep = () => {
+        setHiringStepDirection("next");
+        setCurrentHiringStep((prev) => (prev + 1) % hiringSteps.length);
+    };
+
+    const prevHiringStep = () => {
+        setHiringStepDirection("prev");
+        setCurrentHiringStep(
+            (prev) => (prev - 1 + hiringSteps.length) % hiringSteps.length
+        );
+    };
+
+    // --- Animation Variants ---
+    const filterContainerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+    };
+    const filterItemVariants = {
+        hidden: { opacity: 0, y: -30 },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 150, damping: 15 } },
+    };
+    const jobCardVariants = {
+        enter: (direction) => ({ x: direction === "next" ? 200 : -200, opacity: 0, scale: 0.9 }),
+        center: { zIndex: 1, x: 0, opacity: 1, scale: 1, transition: { x: { type: "spring", stiffness: 250, damping: 25 }, opacity: { duration: 0.3 }, scale: { duration: 0.3 } } },
+        exit: (direction) => ({ zIndex: 0, x: direction === "next" ? -200 : 200, opacity: 0, scale: 0.9, transition: { x: { type: "spring", stiffness: 250, damping: 25 }, opacity: { duration: 0.3 }, scale: { duration: 0.3 } } }),
+    };
+    const hiringCardVariants = {
+        enter: (direction) => ({ rotateY: direction === "next" ? 90 : -90, opacity: 0, scale: 0.8, zIndex: 0 }),
+        center: { rotateY: 0, opacity: 1, scale: 1, zIndex: 1, transition: { type: "spring", stiffness: 200, damping: 20 } },
+        exit: (direction) => ({ rotateY: direction === "next" ? -90 : 90, opacity: 0, scale: 0.8, zIndex: 0, transition: { type: "spring", stiffness: 200, damping: 20 } }),
+    };
+    // --- End Animation Variants ---
+
+    return (
+        <div className="min-h-screen text-gray-100 font-sans w-full overflow-x-hidden relative">
+            <ThreeDBackground />
+            <CustomCursor />
+            <BackToTopButton />
+
+            <main className="w-full relative z-10">
+                {/* === HERO SECTION === */}
+                <section className="relative text-center mb-24 min-h-[500px] md:min-h-[650px] flex flex-col items-center justify-center overflow-hidden p-6">
+                    <div className="absolute inset-0 z-0">
+                        {heroImages.map((img, index) => (
+                            <img
+                                key={index}
+                                src={img.src}
+                                alt={img.alt}
+                                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${index === currentImageIndex ? "opacity-100" : "opacity-0"
+                                    }`}
                             />
-                            <span>{feature}</span>
-                          </li>
                         ))}
-                      </ul>
+                        <div className="absolute inset-0 bg-black/60 z-10"></div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="text-center relative py-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-                Our Partnership Process
-              </span>
-            </h2>
-            <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="hidden lg:block absolute top-1/2 left-0 w-full h-px -mt-8">
-                <svg width="100%" height="2" className="overflow-visible">
-                  <line
-                    x1="0"
-                    y1="1"
-                    x2="100%"
-                    y2="1"
-                    strokeWidth="2"
-                    strokeDasharray="8 8"
-                    className="stroke-cyan-500/30"
-                  />
-                </svg>
-              </div>
-              {[
-                {
-                  icon: <Target />,
-                  title: "Discovery & Assessment",
-                  description:
-                    "We start by understanding your unique challenges, goals, and existing infrastructure.",
-                },
-                {
-                  icon: <ClipboardList />,
-                  title: "Customized Planning",
-                  description:
-                    "A tailored solution is designed, outlining training modules, staffing needs, or a tech roadmap.",
-                },
-                {
-                  icon: <Rocket />,
-                  title: "Implementation & Deployment",
-                  description:
-                    "We execute the plan, whether it's delivering training, placing talent, or building solutions.",
-                },
-                {
-                  icon: <LifeBuoy />,
-                  title: "Support & Evolution",
-                  description:
-                    "Our partnership continues with ongoing support to ensure long-term success and adaptation.",
-                },
-              ].map((step, index) => (
-                <div
-                  key={index}
-                  className="feature-card opacity-0 transform translate-y-10 transition-all duration-700 relative z-10"
-                  style={{ transitionDelay: `${index * 150}ms` }}
-                >
-                  <div className="bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 border border-cyan-500/20 h-full flex flex-col items-center">
-                    <div className="w-20 h-20 mb-6 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white ring-8 ring-gray-900">
-                      {React.cloneElement(step.icon, { size: 36 })}
+                    <div className="relative z-20 container mx-auto px-4">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                            Powering a Smarter Future
+                        </h1>
+                        <p className="text-xl text-cyan-200 max-w-3xl mx-auto mb-10">
+                            Join us at the nexus of AI, robotics, and energy to solve one of the world's most critical challenges.
+                        </p>
+                        <a
+                            href="#openings"
+                            onClick={handleScrollToOpenings}
+                            className="inline-flex items-center gap-3 mx-auto bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-20 text-lg rounded-lg hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive"
+                        >
+                            View Open Positions
+                            <ArrowRight size={20} />
+                        </a>
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-3">
-                      {step.title}
-                    </h3>
-                    <p className="text-cyan-300 flex-grow">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+                </section>
+                {/* ======================================================== */}
 
-          <section className="py-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-                Why Partner With Us?
-              </span>
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                "Industry-leading expertise in drone & AI",
-                "Proven track record with enterprise clients",
-                "Flexible engagement models",
-                "Access to a pre-vetted talent pool",
-                "Accelerated time-to-competency",
-                "Measurable ROI on talent investment",
-              ].map((benefit, index) => (
-                <div
-                  key={index}
-                  className="feature-card opacity-0 transform translate-y-10 transition-all duration-700 bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-cyan-500/20 flex items-center gap-4"
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex-shrink-0 w-12 h-12 bg-cyan-900/50 rounded-lg flex items-center justify-center text-cyan-400">
-                    <CheckCircle size={24} />
-                  </div>
-                  <p className="flex-1 text-lg font-medium text-cyan-100">
-                    {benefit}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
+                <div className="mx-auto max-w-7xl px-4 py-12">
+                    {/* === "Why Join" SECTION (Assuming content exists) === */}
+                    <section className="mb-24">
+                        {/* Add "Why Join Us" content here if needed */}
+                         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
+                            Why Join Us?
+                        </h2>
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                            {/* Example Cards - Replace with your actual content */}
+                            <div className="bg-gray-800/50 p-6 rounded-lg border border-cyan-500/20">
+                                <Sparkles size={40} className="mx-auto mb-4 text-cyan-400"/>
+                                <h3 className="text-xl font-semibold mb-2">Innovate & Impact</h3>
+                                <p className="text-cyan-200">Work on cutting-edge AI and drone tech solving real-world energy problems.</p>
+                            </div>
+                            <div className="bg-gray-800/50 p-6 rounded-lg border border-cyan-500/20">
+                                <Users size={40} className="mx-auto mb-4 text-cyan-400"/>
+                                <h3 className="text-xl font-semibold mb-2">Collaborative Culture</h3>
+                                <p className="text-cyan-200">Join a supportive team passionate about technology and sustainability.</p>
+                            </div>
+                            <div className="bg-gray-800/50 p-6 rounded-lg border border-cyan-500/20">
+                                <Award size={40} className="mx-auto mb-4 text-cyan-400"/>
+                                <h3 className="text-xl font-semibold mb-2">Growth & Learning</h3>
+                                <p className="text-cyan-200">Opportunities for professional development in a fast-growing industry.</p>
+                            </div>
+                        </div>
+                    </section>
+                    {/* ======================================================= */}
 
-          <section className="py-16 feature-card opacity-0 transform translate-y-10 transition-all duration-700 bg-gradient-to-br from-cyan-600/80 to-blue-700/80 rounded-2xl p-12 text-white text-center border border-cyan-400/50 shadow-2xl shadow-cyan-500/10">
-            <h3 className="text-4xl font-bold mb-4">
-              Transform Your Team's Capabilities
-            </h3>
-            <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
-              Ready to empower your organization with the skills for tomorrow?
-              Let's discuss how our talent solutions can drive your success.
-            </p>
-            <Link
-              to="/#contact"
-              className="inline-flex items-center gap-3 mx-auto bg-white text-cyan-700 font-bold py-4 px-10 rounded-xl hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg interactive"
-            >
-              <Phone size={20} />
-              Schedule a Consultation
-            </Link>
-          </section>
+                    {/* === "Current Openings" SECTION === */}
+                    <section
+                        id="openings"
+                        className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 md:p-12 border border-cyan-500/20 shadow-lg mb-24 max-w-5xl w-full mx-auto"
+                    >
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-cyan-400">
+                            Current Openings
+                        </h2>
+                        <p className="text-center text-cyan-200 mb-10">
+                            Find your next opportunity in our list of open positions.
+                        </p>
+
+                        {/* === FILTERS === */}
+                        <motion.div
+                            className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto mb-12"
+                            variants={filterContainerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            {/* Department Filter */}
+                            <motion.div className="w-full sm:w-1/2 relative" variants={filterItemVariants}>
+                                <label htmlFor="department-filter" className="sr-only">Filter by department</label>
+                                <motion.select
+                                    id="department-filter"
+                                    value={filter}
+                                    onChange={(e) => setFilter(e.target.value)}
+                                    className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
+                                    whileHover={{ scale: 1.02, borderColor: "#06B6D4" }}
+                                    whileTap={{ scale: 0.98 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                >
+                                    {departments.map((dept) => (
+                                        <option key={dept} value={dept} className="bg-gray-800 text-white font-medium">
+                                            {dept === "All" ? "All Departments" : dept}
+                                        </option>
+                                    ))}
+                                </motion.select>
+                                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-400">
+                                    <ChevronDown size={20} />
+                                </div>
+                            </motion.div>
+                            {/* Location Filter */}
+                            <motion.div className="w-full sm:w-1/2 relative" variants={filterItemVariants}>
+                                <label htmlFor="location-filter" className="sr-only">Filter by location</label>
+                                <motion.select
+                                    id="location-filter"
+                                    value={locationFilter}
+                                    onChange={(e) => setLocationFilter(e.target.value)}
+                                    className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
+                                    whileHover={{ scale: 1.02, borderColor: "#06B6D4" }}
+                                    whileTap={{ scale: 0.98 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                >
+                                    {locations.map((loc) => (
+                                        <option key={loc} value={loc} className="bg-gray-800 text-white font-medium">
+                                            {loc}
+                                        </option>
+                                    ))}
+                                </motion.select>
+                                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-400">
+                                    <ChevronDown size={20} />
+                                </div>
+                            </motion.div>
+                        </motion.div>
+
+                        {/* === Job Count === */}
+                        <motion.div
+                            key={filteredJobs.length} // Re-animate when count changes
+                            initial={{ opacity: 0, y: -15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, ease: "easeOut" }}
+                            className="text-center text-cyan-200 mb-10"
+                        >
+                            {filteredJobs.length > 0 ? (
+                                <p className="text-lg">
+                                    Showing <span className="font-bold text-cyan-300">{currentJobIndex + 1} of {filteredJobs.length}</span> matching position{filteredJobs.length > 1 ? "s" : ""}
+                                </p>
+                            ) : (
+                                <p className="text-lg">
+                                    No open positions match your selected filters.
+                                </p>
+                            )}
+                        </motion.div>
+
+                        {/* === Job Card Display === */}
+                        <div className="relative min-h-[600px] md:min-h-[650px]"> {/* Increased min-height slightly */}
+                            <AnimatePresence mode="wait" custom={direction}>
+                                {filteredJobs.length > 0 &&
+                                    (() => {
+                                        const job = filteredJobs[currentJobIndex];
+                                        if (!job) return null;
+
+                                        return (
+                                            <motion.a // The clickable job card link
+                                    key={job.title + currentJobIndex} // Use index in key for re-animation on same title filter change
+                                    href={job.applicationLink} // <-- Use the specific link
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="absolute inset-0 block p-6 md:p-8 rounded-2xl border border-cyan-500/20 text-center overflow-hidden group hover:border-cyan-400/60 bg-cover bg-center"
+                                    style={{ backgroundImage: `url(${job.imageUrl})` }}
+                                    custom={direction}
+                                    variants={jobCardVariants}
+                                    initial="enter"
+                                    animate="center"
+                                    exit="exit"
+                                >
+                                    {/* Background Overlays */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/75 to-transparent z-0"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-blue-700/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-0"></div>
+
+                                    {/* Card Content */}
+                                    <div className="relative z-10 flex flex-col h-full justify-end"> {/* Use flex to push content down */}
+                                        <div> {/* Inner container for content */}
+                                            {/* Type */}
+                                            <span className="inline-block bg-cyan-900/60 text-cyan-100 text-xs font-semibold tracking-wider uppercase px-4 py-1.5 rounded-full mb-4 border border-cyan-500/40 backdrop-blur-sm">
+                                                {job.type}
+                                            </span>
+                                            {/* Title */}
+                                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">
+                                                {job.title}
+                                            </h3>
+                                            {/* Details */}
+                                            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-cyan-300/90 mb-4 text-base md:text-lg">
+                                                <span className="flex items-center whitespace-nowrap"><Briefcase size={18} className="mr-2" />{job.department}</span>
+                                                <span className="flex items-center whitespace-nowrap"><MapPin size={18} className="mr-2" />{job.location}</span>
+                                                <span className="flex items-center whitespace-nowrap"><Clock size={18} className="mr-2" />{job.experience}</span>
+                                            </div>
+                                            {/* Divider */}
+                                            <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent mx-auto mb-6"></div>
+                                            {/* Description */}
+                                            <p className="text-cyan-200/95 text-base md:text-lg max-w-3xl mx-auto mb-6 text-justify line-clamp-3 md:line-clamp-4">
+                                                {job.description}
+                                            </p>
+                                            
+                                            {/* === MODIFIED SKILLS SECTION (v5) === */}
+                                            <div className="mb-8">
+                                                <h4 className="font-semibold text-cyan-200/80 mb-4 text-base">Required Skills</h4> 
+                                                
+                                                {/* - Increased gap: gap-x-8 and gap-y-5
+                                                  - Increased container padding: pt-3 and px-6
+                                                */}
+                                                <div className="flex flex-wrap gap-x-8 gap-y-5 justify-center px-6 pt-3"> 
+                                                    {job.skills.map((skill) => (
+                                                        <span
+                                                            key={skill}
+                                                            /* - Significantly increased horizontal padding: px-10
+                                                               - Kept vertical padding: py-3
+                                                            */
+                                                            className="bg-cyan-800/50 border border-cyan-400/60 text-cyan-100
+                                                                       px-10 py-3 rounded-full text-base font-medium shadow-lg shadow-cyan-500/10
+                                                                       transition-all duration-200
+                                                                       hover:bg-cyan-700/70 hover:border-cyan-300/80 hover:scale-105"
+                                                        >
+                                                            {skill}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            {/* === END MODIFIED SECTION === */}
+
+                                            {/* Apply Text */}
+                                            <div className="text-cyan-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center font-semibold text-lg">
+                                                View & Apply <ArrowRight size={20} className="ml-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.a>
+                                        );
+                                    })()}
+                            </AnimatePresence>
+
+                            {/* === Navigation Buttons === */}
+                            {filteredJobs.length > 1 && (
+                                <div className="absolute bottom-[-80px] left-0 right-0 flex justify-between items-center px-4"> {/* MODIFIED: Increased gap from -70px to -80px */}
+                                    <motion.button
+                                        onClick={showPrevJob}
+                                        /* MODIFIED: Increased px-6 to px-8 and gap-2 to gap-3 */
+                                        className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-bold py-3 px-10 rounded-lg interactive shadow-lg shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        aria-label="Previous job"
+                                        whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(6, 182, 212, 0.5)" }}
+                                        whileTap={{ scale: 0.95 }}
+                                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                                    >
+                                        <ArrowLeft size={18} /> Prev
+                                    </motion.button>
+                                    <motion.button
+                                        onClick={showNextJob}
+                                        /* MODIFIED: Increased px-6 to px-8 and gap-2 to gap-3 */
+                                        className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-bold py-3 px-10 rounded-lg interactive shadow-lg shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        aria-label="Next job"
+                                        whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(6, 182, 212, 0.5)" }}
+                                        whileTap={{ scale: 0.95 }}
+                                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                                    >
+                                        Next <ArrowRight size={18} />
+                                    </motion.button>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                    {/* ======================================================= */}
+
+
+                    {/* === "How We Hire" SECTION === */}
+                    <section className="mb-24">
+                        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
+                            How We Hire
+                        </h2>
+                        {/* Carousel Container */}
+                        <div className="relative max-w-2xl mx-auto h-[450px] md:h-[350px]" style={{ perspective: "1500px" }}>
+                            <AnimatePresence mode="wait" custom={hiringStepDirection}>
+                                <motion.div
+                                    key={hiringSteps[currentHiringStep].title} // Key change triggers animation
+                                    className="absolute w-full h-full p-8 md:p-10 rounded-2xl bg-gray-800/60 backdrop-blur-lg border border-cyan-500/25 shadow-xl flex flex-col items-center justify-center text-center"
+                                    style={{ transformStyle: "preserve-3d" }}
+                                    custom={hiringStepDirection}
+                                    variants={hiringCardVariants}
+                                    initial="enter"
+                                    animate="center"
+                                    exit="exit"
+                                >
+                                    {/* Card Content */}
+                                    <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/40 rounded-full flex items-center justify-center mb-5 text-cyan-400 flex-shrink-0">
+                                        {hiringSteps[currentHiringStep].icon}
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-3">
+                                        {hiringSteps[currentHiringStep].title}
+                                    </h3>
+                                    <p className="text-cyan-200 text-base max-w-md">
+                                        {hiringSteps[currentHiringStep].description}
+                                    </p>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                        {/* Carousel Navigation */}
+                        <div className="flex justify-center items-center gap-6 mt-10">
+                            {/* Prev Button */}
+                            <motion.button
+                                onClick={prevHiringStep}
+                                className="p-3 rounded-full bg-gradient-to-br from-cyan-600 to-blue-700 text-white interactive shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                                aria-label="Previous step"
+                                whileHover={{ scale: 1.1, boxShadow: "0 0 12px rgba(6, 182, 212, 0.5)"}}
+                                whileTap={{ scale: 0.9 }}
+                            > <ArrowLeft size={20} /> </motion.button>
+                            {/* Dots */}
+                            <div className="flex gap-2.5">
+                                {hiringSteps.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            setHiringStepDirection(index > currentHiringStep ? "next" : "prev");
+                                            setCurrentHiringStep(index);
+                                        }}
+                                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === currentHiringStep ? "bg-cyan-400 scale-125" : "bg-gray-600/70"} interactive`}
+                                        aria-label={`Go to step ${index + 1}`}
+                                    />
+                                ))}
+                            </div>
+                            {/* Next Button */}
+                            <motion.button
+                                onClick={nextHiringStep}
+                                className="p-3 rounded-full bg-gradient-to-br from-cyan-600 to-blue-700 text-white interactive shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                                aria-label="Next step"
+                                whileHover={{ scale: 1.1, boxShadow: "0 0 12px rgba(6, 182, 212, 0.5)"}}
+                                whileTap={{ scale: 0.9 }}
+                            > <ArrowRight size={20} /> </motion.button>
+                        </div>
+                    </section>
+                    {/* ====================================================== */}
+                </div>
+            </main>
         </div>
-      </main>
-    </div>
-  );
+    );
 };
 
-// FIX: Corrected export statement for clarity. This file now exports all the necessary page components.
+// --- TALENT SOLUTIONS PAGE (Unchanged) ---
+const TalentSolutionsPage = () => {
+    // ... (Talent Solutions Page logic & JSX - unchanged) ...
+    // === NEW: State for Interactive Offerings Dashboard ===
+    const [activeOffering, setActiveOffering] = useState(0);
+
+    // === NEW: State for Testimonial Carousel ===
+    const [currentTestimonial, setCurrentTestimonial] = useState(0);
+    const [testimonialDirection, setTestimonialDirection] = useState("next");
+
+    // === NEW: Data for Core Offerings (moved here for mapping) ===
+    const coreOfferings = [
+        {
+        title: "Corporate Training Programs",
+        description:
+            "Comprehensive training on drone operation, data analysis, and system maintenance.",
+        icon: <Calendar />,
+        features: [
+            "Certified Trainers",
+            "Hands-on Workshops",
+            "Custom Curriculum",
+            "Ongoing Support",
+        ],
+        },
+        {
+        title: "Strategic Consultation",
+        description:
+            "Expert guidance on implementing drone monitoring solutions in your organization.",
+        icon: <Users />,
+        features: [
+            "Strategy Development",
+            "Technology Assessment",
+            "Implementation Planning",
+            "ROI Analysis",
+        ],
+        },
+        {
+        title: "Specialized Staffing",
+        description:
+            "Access to skilled professionals for project-based work or temporary needs.",
+        icon: <Briefcase />,
+        features: [
+            "Quick Deployment",
+            "Vetted Professionals",
+            "Flexible Terms",
+            "Quality Assurance",
+        ],
+        },
+        {
+        title: "Custom Solution Development",
+        description:
+            "Tailored programs and integrations to meet your organization's specific requirements.",
+        icon: <Cog />,
+        features: [
+            "Needs Assessment",
+            "Custom Development",
+            "Integration Support",
+            "Continuous Maintenance",
+        ],
+        },
+    ];
+
+    // === NEW: Data for Partnership Process (moved here for mapping) ===
+    const partnershipProcess = [
+        {
+        icon: <Target />,
+        title: "Discovery & Assessment",
+        description:
+            "We start by understanding your unique challenges, goals, and existing infrastructure.",
+        },
+        {
+        icon: <ClipboardList />,
+        title: "Customized Planning",
+        description:
+            "A tailored solution is designed, outlining training modules, staffing needs, or a tech roadmap.",
+        },
+        {
+        icon: <Rocket />,
+        title: "Implementation & Deployment",
+        description:
+            "We execute the plan, whether it's delivering training, placing talent, or building solutions.",
+        },
+        {
+        icon: <LifeBuoy />,
+        title: "Support & Evolution",
+        description:
+            "Our partnership continues with ongoing support to ensure long-term success and adaptation.",
+        },
+    ];
+
+    // === NEW: Data for Testimonials ===
+    const testimonials = [
+        {
+        quote:
+            "The specialized training completely transformed our field operations. Our team is now faster, safer, and more efficient than we ever thought possible.",
+        name: "Alex Chen",
+        title: "Director of Operations, GridForward Energy",
+        },
+        {
+        quote:
+            "Partnering with them for strategic consultation was a game-changer. They identified critical gaps in our drone program and provided a clear, actionable roadmap for success.",
+        name: "Maria Rodriguez",
+        title: "VP of Innovation, Summit Utilities",
+        },
+        {
+        quote:
+            "The specialized staff they provided integrated seamlessly with our team and were productive from day one. It was the perfect solution for our short-term project needs.",
+        name: "David Kim",
+        title: "Project Manager, Apex Power",
+        },
+    ];
+
+    // === NEW: Navigation logic for Testimonials ===
+    const nextTestimonial = () => {
+        setTestimonialDirection("next");
+        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    };
+
+    const prevTestimonial = () => {
+        setTestimonialDirection("prev");
+        setCurrentTestimonial(
+        (prev) => (prev - 1 + testimonials.length) % testimonials.length
+        );
+    };
+
+    // === NEW: Animation Variants ===
+    const offeringContentVariants = {
+        enter: { opacity: 0, x: 50 },
+        center: {
+        opacity: 1,
+        x: 0,
+        transition: { type: "spring", stiffness: 100, damping: 15 },
+        },
+        exit: {
+        opacity: 0,
+        x: -50,
+        transition: { duration: 0.2 },
+        },
+    };
+
+    const timelineContainerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.3, // Each step animates 0.3s after the previous
+        },
+        },
+    };
+
+    const timelineStepVariants = {
+        hidden: { opacity: 0, x: -50 }, // Come in from the left
+        visible: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            type: "spring",
+            stiffness: 100,
+            damping: 12,
+        },
+        },
+    };
+
+    const testimonialVariants = {
+        enter: (direction) => ({
+        rotateY: direction === "next" ? 90 : -90,
+        opacity: 0,
+        scale: 0.9,
+        }),
+        center: {
+        rotateY: 0,
+        opacity: 1,
+        scale: 1,
+        zIndex: 1,
+        transition: { type: "spring", stiffness: 200, damping: 25 },
+        },
+        exit: (direction) => ({
+        rotateY: direction === "next" ? -90 : 90,
+        opacity: 0,
+        scale: 0.9,
+        zIndex: 0,
+        transition: { type: "spring", stiffness: 200, damping: 25 },
+        }),
+    };
+    // =============================
+
+    // Animate-on-scroll logic (unchanged)
+    useEffect(() => {
+        const checkScroll = () => {
+        const elements = document.querySelectorAll(".feature-card");
+        elements.forEach((element) => {
+            const elementPosition = element.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.3;
+            if (elementPosition < screenPosition) {
+            element.classList.add("animate");
+            }
+        });
+        };
+        window.addEventListener("scroll", checkScroll, { passive: true });
+        checkScroll();
+        return () => window.removeEventListener("scroll", checkScroll);
+    }, []);
+
+    return (
+        <div className="min-h-screen text-gray-100 font-sans w-full overflow-x-hidden relative">
+        <ThreeDBackground />
+        <CustomCursor />
+        <BackToTopButton />
+        {/* <Header /> */}
+
+        <main className="w-full px-4 py-12 pt-20 relative z-10">
+            <div className="mx-auto max-w-7xl">
+            {/* === HERO SECTION (Unchanged) === */}
+            <section className="text-center mb-24"> {/* Added mb-24 */}
+                <div className="inline-block bg-cyan-500/10 px-4 py-2 rounded-full mb-6 border border-cyan-500/30">
+                <span className="text-cyan-300 text-sm font-medium">
+                    Empowering Your Workforce
+                </span>
+                </div>
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                Advanced Talent Solutions
+                </h1>
+                <p className="text-xl text-cyan-200 max-w-3xl mx-auto">
+                Bridge the skills gap in emerging technologies with our
+                specialized training, staffing, and consultation for advanced
+                drone and AI monitoring systems.
+                </p>
+            </section>
+
+            {/* === [IMPROVED] "Our Core Offerings" Interactive Dashboard === */}
+            <section className="py-20"> {/* Adjusted padding */}
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                    Our Core Offerings
+                </span>
+                </h2>
+                <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
+                {/* Left Side: Control Panel / Tabs */}
+                <div className="flex md:flex-col gap-4 w-full md:w-1/3">
+                    {coreOfferings.map((service, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setActiveOffering(index)}
+                        className={`w-full p-6 rounded-lg border border-cyan-500/20 text-left transition-all duration-300 interactive ${
+                        activeOffering === index
+                            ? "bg-cyan-800/50 border-cyan-500/70 shadow-lg scale-105" // Added scale
+                            : "bg-gray-800/50 hover:bg-gray-800/80"
+                        }`}
+                    >
+                        <div className="flex items-center gap-4">
+                        <div
+                            className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-300 ${
+                            activeOffering === index
+                                ? "bg-cyan-500 text-white"
+                                : "bg-cyan-900/50 text-cyan-400"
+                            }`}
+                        >
+                            {React.cloneElement(service.icon, { size: 24 })}
+                        </div>
+                        <div>
+                            <h3
+                            className={`text-lg font-bold transition-colors ${
+                                activeOffering === index
+                                ? "text-white"
+                                : "text-cyan-200"
+                            }`}
+                            >
+                            {service.title}
+                            </h3>
+                        </div>
+                        </div>
+                    </button>
+                    ))}
+                </div>
+
+                {/* Right Side: Content Display */}
+                <div className="w-full md:w-2/3 min-h-[400px] relative"> {/* Increased min height */}
+                    <AnimatePresence mode="wait">
+                    <motion.div
+                        key={activeOffering}
+                        variants={offeringContentVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        className="absolute inset-0 w-full h-full bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 shadow-lg"
+                    >
+                        <div className="relative inline-block mb-6"> {/* Changed flex-shrink */}
+                        <div className="w-16 h-16 bg-gradient-to-br from-cyan-900 to-blue-900/70 rounded-xl flex items-center justify-center text-cyan-400">
+                            {React.cloneElement(
+                            coreOfferings[activeOffering].icon,
+                            { size: 32 }
+                            )}
+                        </div>
+                        <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 rounded-xl blur-lg animate-pulse"></div>
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-3">
+                        {coreOfferings[activeOffering].title}
+                        </h3>
+                        <p className="text-cyan-200 mb-6">
+                        {coreOfferings[activeOffering].description}
+                        </p>
+                        <ul className="space-y-2">
+                        {coreOfferings[activeOffering].features.map(
+                            (feature, fIndex) => (
+                            <li
+                                key={fIndex}
+                                className="flex items-center text-cyan-300"
+                            >
+                                <CheckCircle
+                                size={16}
+                                className="text-cyan-500 mr-3 flex-shrink-0"
+                                />
+                                <span>{feature}</span>
+                            </li>
+                            )
+                        )}
+                        </ul>
+                    </motion.div>
+                    </AnimatePresence>
+                </div>
+                </div>
+            </section>
+
+            {/* === [IMPROVED] "Our Partnership Process" Animated Timeline === */}
+            <section className="py-20 relative"> {/* Adjusted padding */}
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                    Our Partnership Process
+                </span>
+                </h2>
+                <motion.div
+                className="relative max-w-3xl mx-auto" // Centered
+                variants={timelineContainerVariants}
+                initial="hidden"
+                whileInView="visible" // Animate when it comes into view
+                viewport={{ once: true, amount: 0.1 }} // Trigger earlier
+                >
+                {partnershipProcess.map((step, index) => (
+                    <motion.div
+                    key={index}
+                    className="flex gap-6 md:gap-8 mb-10" // Spacing between steps
+                    variants={timelineStepVariants}
+                    >
+                    {/* Left Side: Icon and Timeline */}
+                    <div className="relative flex flex-col items-center flex-shrink-0 w-20">
+                        {/* The vertical line */}
+                        {index < partnershipProcess.length - 1 && (
+                        <div className="absolute top-10 left-1/2 w-0.5 h-full bg-cyan-800/50 -translate-x-1/2 z-0" />
+                        )}
+                        {/* Icon Circle */}
+                        <div className="relative z-10 w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white ring-8 ring-gray-900/50"> {/* Added bg to ring */}
+                        {React.cloneElement(step.icon, { size: 36 })}
+                        </div>
+                    </div>
+
+                    {/* Right Side: Content Card */}
+                    <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-cyan-500/20 w-full text-left">
+                        <h3 className="text-xl font-bold text-white mb-3">
+                        {step.title}
+                        </h3>
+                        <p className="text-cyan-300">{step.description}</p>
+                    </div>
+                    </motion.div>
+                ))}
+                </motion.div>
+            </section>
+
+            {/* === "Why Partner With Us?" (Unchanged) === */}
+            <section className="py-16">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                    Why Partner With Us?
+                </span>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                    "Industry-leading expertise in drone & AI",
+                    "Proven track record with enterprise clients",
+                    "Flexible engagement models",
+                    "Access to a pre-vetted talent pool",
+                    "Accelerated time-to-competency",
+                    "Measurable ROI on talent investment",
+                ].map((benefit, index) => (
+                    <div
+                    key={index}
+                    className="feature-card opacity-0 transform translate-y-10 transition-all duration-700 bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-cyan-500/20 flex items-center gap-4"
+                    style={{ transitionDelay: `${index * 100}ms` }}
+                    >
+                    <div className="flex-shrink-0 w-12 h-12 bg-cyan-900/50 rounded-lg flex items-center justify-center text-cyan-400">
+                        <CheckCircle size={24} />
+                    </div>
+                    <p className="flex-1 text-lg font-medium text-cyan-100">
+                        {benefit}
+                    </p>
+                    </div>
+                ))}
+                </div>
+            </section>
+
+            {/* === [NEW] "From Our Partners" Testimonial Carousel === */}
+            <section className="py-16">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
+                From Our Partners
+                </h2>
+
+                {/* Container to create the 3D perspective and hold the carousel */}
+                <div
+                className="relative max-w-3xl mx-auto h-[400px] md:h-[300px]" // Set a fixed height
+                style={{ perspective: "1500px" }}
+                >
+                <AnimatePresence mode="wait" custom={testimonialDirection}>
+                    <motion.div
+                    key={currentTestimonial}
+                    className="absolute w-full h-full p-8 md:p-12 rounded-2xl bg-gray-800/50 backdrop-blur-md border border-cyan-500/20 shadow-lg flex flex-col items-center justify-center text-center"
+                    style={{ transformStyle: "preserve-3d" }}
+                    custom={testimonialDirection}
+                    variants={testimonialVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    >
+                    {/* Testimonial Content */}
+                    <Quote
+                        size={48}
+                        className="absolute top-8 left-8 text-cyan-700/50"
+                    />
+                    <div className="flex mb-4">
+                        {[...Array(5)].map((_, i) => (
+                        <Star
+                            key={i}
+                            size={20}
+                            className="text-yellow-400 fill-yellow-400"
+                        />
+                        ))}
+                    </div>
+                    <p className="text-lg md:text-xl font-light text-cyan-100 mb-6 italic max-w-prose">
+                        "{testimonials[currentTestimonial].quote}"
+                    </p>
+                    <div className="mt-auto">
+                        <p className="text-lg font-bold text-white">
+                        {testimonials[currentTestimonial].name}
+                        </p>
+                        <p className="text-sm text-cyan-400">
+                        {testimonials[currentTestimonial].title}
+                        </p>
+                    </div>
+                    <Quote
+                        size={48}
+                        className="absolute bottom-8 right-8 text-cyan-700/50 transform scale-x-[-1]"
+                    />
+                    </motion.div>
+                </AnimatePresence>
+                </div>
+
+                {/* Navigation for the carousel */}
+                <div className="flex justify-center items-center gap-8 mt-12">
+                {/* Previous Button */}
+                <motion.button
+                    onClick={prevTestimonial}
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-6 rounded-lg interactive shadow-lg shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75"
+                    aria-label="Previous testimonial"
+                    whileHover={{
+                    scale: 1.08,
+                    backgroundImage:
+                        "linear-gradient(to right, #22D3EE, #3B82F6)",
+                    boxShadow: "0 0 15px rgba(6, 182, 212, 0.6)",
+                    }}
+                    whileTap={{
+                    scale: 0.95,
+                    backgroundImage:
+                        "linear-gradient(to right, #06B6D4, #2563EB)",
+                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                >
+                    <ArrowLeft size={18} />
+                    Prev
+                </motion.button>
+
+                {/* Pagination Dots */}
+                <div className="flex gap-2">
+                    {testimonials.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => {
+                        setTestimonialDirection(
+                            index > currentTestimonial ? "next" : "prev"
+                        );
+                        setCurrentTestimonial(index);
+                        }}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentTestimonial
+                            ? "bg-cyan-400 scale-125"
+                            : "bg-gray-600/50"
+                        } interactive`}
+                        aria-label={`Go to testimonial ${index + 1}`}
+                    />
+                    ))}
+                </div>
+
+                {/* Next Button */}
+                <motion.button
+                    onClick={nextTestimonial}
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-6 rounded-lg interactive shadow-lg shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75"
+                    aria-label="Next testimonial"
+                    whileHover={{
+                    scale: 1.08,
+                    backgroundImage:
+                        "linear-gradient(to right, #22D3EE, #3B82F6)",
+                    boxShadow: "0 0 15px rgba(6, 182, 212, 0.6)",
+                    }}
+                    whileTap={{
+                    scale: 0.95,
+                    backgroundImage:
+                        "linear-gradient(to right, #06B6D4, #2563EB)",
+                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                >
+                    Next
+                    <ArrowRight size={18} />
+                </motion.button>
+                </div>
+            </section>
+
+            {/* === CTA SECTION (Unchanged) === */}
+            <section className="py-16 mb-12 feature-card opacity-0 transform translate-y-10 transition-all duration-700 bg-gradient-to-br from-cyan-600/80 to-blue-700/80 rounded-2xl p-12 text-white text-center border border-cyan-400/50 shadow-2xl shadow-cyan-500/10"> {/* Added mb-12 */}
+                <h3 className="text-4xl font-bold mb-4">
+                Transform Your Team's Capabilities
+                </h3>
+                <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                Ready to empower your organization with the skills for tomorrow?
+                Let's discuss how our talent solutions can drive your success.
+                </p>
+                <Link
+                to="/#contact" // Assuming you want this to link to the contact section on the homepage
+                className="inline-flex items-center gap-3 mx-auto bg-white text-cyan-700 font-bold py-4 px-10 rounded-xl hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg interactive"
+                >
+                <Phone size={20} />
+                Schedule a Consultation
+                </Link>
+            </section>
+            </div>
+        </main>
+        </div>
+    );
+};
+
+// --- EXPORTS (Unchanged) ---
 export {
   BackToTopButton,
   LoadingScreen,

@@ -1,9 +1,11 @@
+// src/Header.jsx
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logoImg from "./assets/logo/logo.png";
 
-// ✅ useMobile hook (768px breakpoint)
+// useMobile hook (no change)
 const useMobile = (breakpoint = 768) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
@@ -33,12 +35,12 @@ const Header = () => {
     { name: "Contact", href: "#contact", isAnchor: true },
   ];
 
-  // ✅ Close menu on route change
+  // Close menu on route change (no change)
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location.pathname]);
 
-  // ✅ Handle anchor scroll logic
+  // Handle anchor scroll logic (no change)
   const handleAnchorClick = useCallback(
     (e, href) => {
       e.preventDefault();
@@ -57,38 +59,52 @@ const Header = () => {
   );
 
   return (
-    <header className="sticky w-full top-0 z-40 bg-gray-900/80 backdrop-blur-md border-b border-cyan-500/20 shadow-lg">
-      <div className="container mx-auto px-4">
+    // ✅ CHANGED: Replaced bg-indigo-950 with bg-logo-dark-blue
+    <header className="sticky w-full top-0 z-40 bg-logo-dark-blue/80 backdrop-blur-md border-b border-cyan-500/20 shadow-lg">
+      <div className="w-full px-4">
         <div className="flex justify-between items-center h-16">
           {/* ✅ Logo */}
-          <Link to="/" className="flex-shrink-0 flex items-center -ml-4">
+          <Link
+            to="/"
+            className="flex-shrink-0 flex items-center group interactive"
+          >
             <img src={logoImg} alt="COEUS Logo" className="h-15 w-auto" />
-            <span className="ml-3 text-xl font-bold text-white"></span>
+            <span className="ml-2 text-xl font-bold text-gray-200 group-hover:text-white transition-colors">
+            
+            </span>
           </Link>
 
           {/* ✅ Desktop Navigation (only when not mobile) */}
           {!isMobile && (
-            <nav className="flex flex-row gap-5 items-center">
-              {navLinks.map((link) => (
-                <React.Fragment key={link.name}>
-                  {link.isAnchor ? (
-                    <a
-                      href={link.href}
-                      onClick={(e) => handleAnchorClick(e, link.href)}
-                      className="font-medium text-cyan-100 hover:text-white transition-colors interactive"
-                    >
-                      {link.name}
-                    </a>
-                  ) : (
-                    <Link
-                      to={link.href}
-                      className="font-medium text-cyan-100 hover:text-white transition-colors interactive"
-                    >
-                      {link.name}
-                    </Link>
-                  )}
-                </React.Fragment>
-              ))}
+            <nav className="flex flex-row gap-6 items-center">
+              {navLinks.map((link) => {
+                const isActive = !link.isAnchor && location.pathname === link.href;
+
+                return (
+                  <React.Fragment key={link.name}>
+                    {link.isAnchor ? (
+                      <a
+                        href={link.href}
+                        onClick={(e) => handleAnchorClick(e, link.href)}
+                        className="font-medium text-gray-300 hover:text-cyan-300 transition-colors interactive"
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className={`font-medium transition-colors interactive ${
+                          isActive
+                            ? "text-cyan-400 font-semibold"
+                            : "text-gray-300 hover:text-cyan-300"
+                        }`}
+                      >
+                        {link.name}
+                      </Link>
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </nav>
           )}
 
@@ -106,29 +122,38 @@ const Header = () => {
 
       {/* ✅ Mobile Dropdown Menu */}
       {isMobile && isMenuOpen && (
-        <div className="bg-gray-900/95 border-t border-cyan-500/20">
+        // ✅ CHANGED: Replaced bg-indigo-950 with bg-logo-dark-blue
+        <div className="bg-logo-dark-blue/95 border-t border-cyan-500/20 animate-slide-down">
           <nav className="container mx-auto px-4 pt-2 pb-4 flex flex-col space-y-2">
-            {navLinks.map((link) => (
-              <React.Fragment key={link.name}>
-                {link.isAnchor ? (
-                  <a
-                    href={link.href}
-                    onClick={(e) => handleAnchorClick(e, link.href)}
-                    className="font-medium text-cyan-100 hover:text-white p-2 rounded-md hover:bg-cyan-500/10 transition-colors interactive"
-                  >
-                    {link.name}
-                  </a>
-                ) : (
-                  <Link
-                    to={link.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="font-medium text-cyan-100 hover:text-white p-2 rounded-md hover:bg-cyan-500/10 transition-colors interactive"
-                  >
-                    {link.name}
-                  </Link>
-                )}
-              </React.Fragment>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = !link.isAnchor && location.pathname === link.href;
+
+              return (
+                <React.Fragment key={link.name}>
+                  {link.isAnchor ? (
+                    <a
+                      href={link.href}
+                      onClick={(e) => handleAnchorClick(e, link.href)}
+                      className="font-medium text-gray-200 hover:text-white p-3 rounded-md hover:bg-cyan-500/10 transition-colors interactive"
+                    >
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`font-medium p-3 rounded-md transition-colors interactive ${
+                        isActive
+                          ? "text-cyan-400 bg-cyan-500/10 font-semibold"
+                          : "text-gray-200 hover:text-white hover:bg-cyan-500/10"
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </nav>
         </div>
       )}
