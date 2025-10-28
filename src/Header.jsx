@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import logoImg from "./assets/logo/logo.png";
+import logoImg from "./assets/logo/1000077413-removebg-preview.png";
 
 // useMobile hook (no change)
 const useMobile = (breakpoint = 768) => {
