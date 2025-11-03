@@ -1550,7 +1550,7 @@ const CareersPage = () => {
                                                                - Kept vertical padding: py-3
                                                             */
                                     className="bg-cyan-800/50 border border-cyan-400/60 text-cyan-100
-                                                                       py-3 px-10 md:px-10 rounded-full text-base font-medium shadow-lg shadow-cyan-500/10
+                                                                       py-3 px-5 md:px-10 rounded-full text-base font-medium shadow-lg shadow-cyan-500/10
                                                                        transition-all duration-200
                                                                        hover:bg-cyan-700/70 hover:border-cyan-300/80 hover:scale-105"
                                   >
