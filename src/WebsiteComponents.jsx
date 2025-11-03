@@ -1498,7 +1498,7 @@ const CareersPage = () => {
                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-blue-700/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-0"></div>
 
                         {/* Card Content */}
-                        <div className="relative z-10 flex flex-col h-full justify-center">
+                        <div className="relative z-10 flex flex-col h-full justify-start">
                           {" "}
                           {/* Use flex to push content down */}
                           <div>
