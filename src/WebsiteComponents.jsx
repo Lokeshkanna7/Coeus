@@ -1542,7 +1542,7 @@ const CareersPage = () => {
                               {/* - Increased gap: gap-x-8 and gap-y-5
                                                   - Increased container padding: pt-3 and px-6
                                                 */}
-                              <div className="flex flex-wrap gap-x-8 gap-y-5 justify-center px-6 pt-3">
+                              <div className="flex flex-wrap gap-x-4 gap-y-3 md:gap-x-8 md:gap-y-5 justify-center px-2 md:px-6 pt-3">
                                 {job.skills.map((skill) => (
                                   <span
                                     key={skill}
@@ -1550,7 +1550,7 @@ const CareersPage = () => {
                                                                - Kept vertical padding: py-3
                                                             */
                                     className="bg-cyan-800/50 border border-cyan-400/60 text-cyan-100
-                                                                       px-10 py-3 rounded-full text-base font-medium shadow-lg shadow-cyan-500/10
+                                                                       py-3 px-10 md:px-10 rounded-full text-base font-medium shadow-lg shadow-cyan-500/10
                                                                        transition-all duration-200
                                                                        hover:bg-cyan-700/70 hover:border-cyan-300/80 hover:scale-105"
                                   >
@@ -1730,9 +1730,7 @@ const AnimatedGradientBackground = () => {
   );
 };
 
-// === Placeholder Components (replace with your actual components) ===
-// const CustomCursor = () => null;
-// const BackToTopButton = () => null;
+
 // const Header = () => null;
 
 const TalentSolutionsPage = () => {
@@ -1993,9 +1991,10 @@ const TalentSolutionsPage = () => {
             </h2>
             {/* Adjusted max-width for the entire section content */}
             <div className="flex flex-col md:flex-row gap-8 max-w-4xl mx-auto">
-              {/* Left Side: Control Panel / Tabs */}
-              {/* Adjusted width to allow centering */}
-              <div className="flex md:flex-col gap-4 w-full md:w-1/2 mx-auto">
+              
+              
+              <div className="flex flex-col gap-4 w-full md:w-1/2 mx-auto">
+
                 {coreOfferings.map((service, index) => (
                   <button
                     key={index}
@@ -2121,7 +2120,7 @@ const TalentSolutionsPage = () => {
             </div>
           </section>
 
-          // ... (rest of your component code)
+
 
           {/* === [IMPROVED] "Our Partnership Process" Animated Horizontal Flowchart === */}
           <section className="py-20 relative">
@@ -2254,7 +2253,7 @@ const TalentSolutionsPage = () => {
             </motion.div>
           </section>
 
-// ... (rest of your component code)
+
 
           {/* === "Why Partner With Us?" (IMPROVED with framer-motion) === */}
           <section className="py-16">
