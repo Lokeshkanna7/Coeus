@@ -57,7 +57,7 @@ import {
 } from "lucide-react";
 import Header from "./Header";
 // Import assets (Ensure paths are correct)
-import loadingVideo from "./assets/Screen Recording 2025-09-08 221552.mp4";
+
 import logoImg from "./assets/logo/1000077413-removebg-preview.png";
 import automatedInspectionsImg from "./assets/images/Automated Inspections.png";
 import predictiveMaintenanceImg from "./assets/images/Predictive Maintenance.png";
@@ -902,7 +902,7 @@ const DroneCompanyWebsite = () => {
                   below to open our contact form.
                 </p>
                 <a
-                  href="https://forms.gle/your-google-form-id" // Replace with your actual form link
+                  href="https://forms.gle/ou4h4RWvYLPB983h7" // Replace with your actual form link
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full max-w-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive flex items-center justify-center"
@@ -991,7 +991,7 @@ const CareersPage = () => {
         "Unsupervised Learning",
       ],
       imageUrl: ml_engineer,
-      applicationLink: "https://forms.gle/link-for-ml-engineer", // Replace with actual link
+      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSdHytlju1zdCSo-AXPnNVy3Zuw9LKJHFcwbimCp8owEYRSgjg/viewform?usp=header", // Replace with actual link
     },
     {
       title: "Embedded Systems Engineer (Edge AI / Drones)",
@@ -1010,7 +1010,7 @@ const CareersPage = () => {
         "Signal Processing",
       ],
       imageUrl: embeddedsystemengineer,
-      applicationLink: "https://forms.gle/link-for-embedded-engineer", // Replace with actual link
+      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSecSnT5SJO2UbFGbGDSr-fsGtTJQw8ToCulFBxDaL8VwddaFA/viewform?usp=header", // Replace with actual link
     },
     {
       title: "IoT Solutions Architect",
@@ -1028,7 +1028,7 @@ const CareersPage = () => {
         "Encryption",
       ],
       imageUrl: iotsolution,
-      applicationLink: "https://forms.gle/link-for-iot-architect", // Replace with actual link
+      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSf9wGnE2NlVvBhphjsv3tQqussggRBjIjqlMlZYWOW076Vxcw/viewform?usp=header", // Replace with actual link
     },
     {
       title: "SAP BTP Architect",
@@ -1048,7 +1048,7 @@ const CareersPage = () => {
         "REST APIs",
       ],
       imageUrl: sapbtp,
-      applicationLink: "https://forms.gle/link-for-sap-architect", // Replace with actual link
+      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSfuH5JisO7tDZ4zaBctw9h8gS3C4yv_H9TR_8JtiFXPhMCq7A/viewform?usp=dialog", // Replace with actual link
     },
     {
       title: "Product Manager (Tech)",
@@ -1067,7 +1067,7 @@ const CareersPage = () => {
         "Analytics",
       ],
       imageUrl: productmanager,
-      applicationLink: "https://forms.gle/link-for-product-manager", // Replace with actual link
+      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSeJnRXCTmne5XGYkIjj5BMlAYZv8Zx_8f0G05uS9-bTT3V8pQ/viewform?usp=publish-editor", // Replace with actual link
     },
     {
       title: "FinOps Manager (Financial Operations)",
@@ -1086,7 +1086,7 @@ const CareersPage = () => {
         "CloudHealth/Apptio",
       ],
       imageUrl: finopsmanager,
-      applicationLink: "https://forms.gle/link-for-finops-manager", // Replace with actual link
+      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLScy_ho_mh4ThB9Sp9USe4EsXdfoxxg-HBDFbK6NpRaBGgiUYw/viewform?usp=publish-editor", // Replace with actual link
     },
     {
       title: "(Veteran Preferred) Part-Time Remote Drone Operations Consultant",
@@ -1105,7 +1105,7 @@ const CareersPage = () => {
         "Remote Collaboration",
       ],
       imageUrl: remotedroneoperation,
-      applicationLink: "https://forms.gle/link-for-drone-consultant", // Replace with actual link
+      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSdP4j5XnHNNHwHLbODScr3zhhq61ZZ5MqpyftsHxiywOSv1HA/viewform?usp=publish-editor", // Replace with actual link
     },
   ];
 
