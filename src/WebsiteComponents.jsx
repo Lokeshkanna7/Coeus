@@ -1485,8 +1485,8 @@ const CareersPage = () => {
                         href={job.applicationLink} // <-- Use the specific link
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="absolute inset-0 block p-6 md:p-8 rounded-2xl border border-cyan-500/20 text-center overflow-hidden group hover:border-cyan-400/60 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${job.imageUrl})` }}
+                        className="absolute inset-0 block p-6 md:p-8 rounded-2xl border border-cyan-500/20 text-center overflow-y-auto group hover:border-cyan-400/60 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${job.imageUrl})` }}
                         custom={direction}
                         variants={jobCardVariants}
                         initial="enter"
@@ -1498,7 +1498,7 @@ const CareersPage = () => {
                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-blue-700/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-0"></div>
 
                         {/* Card Content */}
-                        <div className="relative z-10 flex flex-col h-full justify-end">
+                        <div className="relative z-10 flex flex-col h-full justify-center">
                           {" "}
                           {/* Use flex to push content down */}
                           <div>
@@ -1513,7 +1513,7 @@ const CareersPage = () => {
                               {job.title}
                             </h3>
                             {/* Details */}
-                            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-cyan-300/90 mb-4 text-base md:text-lg">
+                            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-white mb-4 text-base md:text-lg">
                               <span className="flex items-center whitespace-nowrap">
                                 <Briefcase size={18} className="mr-2" />
                                 {job.department}
