@@ -1083,17 +1083,17 @@ const CareersPage = () => {
         "Cost Modeling",
         "Forecasting",
         "KPI Reporting",
-        "CloudHealth/Apptio",
+        "CloudHealth",
       ],
       imageUrl: finopsmanager,
       applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLScy_ho_mh4ThB9Sp9USe4EsXdfoxxg-HBDFbK6NpRaBGgiUYw/viewform?usp=publish-editor", // Replace with actual link
     },
     {
-      title: "(Veteran Preferred) Part-Time Remote Drone Operations Consultant",
+      title: "Part-Time Remote Drone Operations Consultant",
       department: "Consulting/Operations",
       location: "Remote / Part-Time / Contract",
       type: "Part-Time / Contract",
-      experience: "Veteran/Military UAV Experience",
+      experience: " UAV Experience",
       description:
         "Provide remote consulting on drone mission design, data analysis (imagery, LiDAR), hardware selection, operational procedures, and training for civilian/enterprise projects.",
       skills: [
