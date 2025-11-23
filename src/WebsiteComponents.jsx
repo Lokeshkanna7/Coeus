@@ -57,7 +57,8 @@ import {
 } from "lucide-react";
 import Header from "./Header";
 // Import assets (Ensure paths are correct)
-
+// Add this at the top with your other imports
+import loadingVideo from "./assets/logo-animation.mp4";
 import logoImg from "./assets/logo/1000077413-removebg-preview.png";
 import automatedInspectionsImg from "./assets/images/Automated Inspections.png";
 import predictiveMaintenanceImg from "./assets/images/Predictive Maintenance.png";
@@ -1003,32 +1004,37 @@ const DroneCompanyWebsite = () => {
           {/* ================================================== */}
         </div>{" "}
         {/* End Central Container */}
-        {/* Footer (Unchanged) */}
-        <footer className="border-t border-cyan-500/20 py-16 relative z-10">
-          {/* ... Footer content ... */}
-          <div className="container mx-auto px-4">
-            <div className="pt-8 text-center">
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-30 h-30 rounded-lg flex items-center justify-center mr-3 p-2">
-                  <img
-                    src={logoImg}
-                    alt="COEUS Logo - Intelligent Inspection and Detection as a Service"
-                    className="w-full h-full object-contain"
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="sync"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
-                </div>
-              </div>
-              <p className="text-cyan-300">
-                © 2025 COEUS. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </footer>
+        {/* Footer */}
+<footer className="border-t border-cyan-500/20 py-16 relative z-10">
+  {/* ... Footer content ... */}
+  <div className="container mx-auto px-4">
+    <div className="pt-8 text-center">
+      
+      {/* ✅ FIX 1: Removed the restrictive 'w-30 h-30' div wrapper */}
+      <div className="flex items-center justify-center mb-6">
+        <img
+          src={logoImg}
+          alt="COEUS Logo - Intelligent Inspection and Detection as a Service"
+          // ✅ FIX 2: Used standard Tailwind classes. 
+          // h-20 (mobile) and h-28 (desktop) lets the logo expand naturally.
+          className="h-30 md:h-50 w-auto object-contain hover:scale-105 transition-transform duration-300"
+          
+          // ✅ FIX 3: Changed to 'lazy' because footers are off-screen initially
+          loading="lazy" 
+          decoding="async"
+          
+          onError={(e) => {
+            e.target.style.display = "none";
+          }}
+        />
+      </div>
+
+      <p className="text-cyan-300">
+        © 2025 COEUS. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
       </div>
     </div>
   );
