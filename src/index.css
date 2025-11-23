@@ -148,3 +148,30 @@ video {
   opacity: 0;
   transition: opacity 0.5s ease-in;
 }
+/* Add this to src/index.css */
+
+/* When the JavaScript adds this class, make the element visible */
+.animate {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Ensure the base state allows for transition */
+.feature-card, .stat-item {
+  will-change: opacity, transform;
+}
+
+/* Optional: Add a glow to the cursor if it's missing */
+.custom-cursor {
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.backdrop-blur-md {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.backdrop-blur-xl {
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}

@@ -100,43 +100,54 @@ const ThreeDBackground = () => {
     let animationFrameId;
     let particles = [];
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    const init = () => {
+      // FIX: Handle Retina/High DPI displays (Fixes blurry canvas on Safari/Mac)
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      
+      // Scale context to match
+      ctx.scale(dpr, dpr);
+      
+      // Style width/height must match window
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+
+      // Create particles
+      particles = []; // Clear old particles
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: Math.random() * window.innerWidth, // Use window.innerWidth, not canvas.width
+          y: Math.random() * window.innerHeight,
+          radius: Math.random() * 3 + 1,
+          speedX: (Math.random() - 0.5) * 0.5,
+          speedY: (Math.random() - 0.5) * 0.5,
+          color: `hsl(${Math.random() * 60 + 200}, 70%, ${Math.random() * 30 + 50}%)`,
+        });
+      }
     };
 
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        color: `hsl(${Math.random() * 60 + 200}, 70%, ${
-          Math.random() * 30 + 50
-        }%)`,
-      });
-    }
+    // Initialize
+    init();
 
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Clear using visual dimensions
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
+      // Background
       const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
+        window.innerWidth / 2,
+        window.innerHeight / 2,
         0,
-        canvas.width / 2,
-        canvas.height / 2,
-        Math.max(canvas.width, canvas.height) / 1.5
+        window.innerWidth / 2,
+        window.innerHeight / 2,
+        Math.max(window.innerWidth, window.innerHeight) / 1.5
       );
       gradient.addColorStop(0, "rgba(10, 25, 47, 0.9)");
       gradient.addColorStop(1, "rgba(25, 55, 109, 0.6)");
 
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
       particles.forEach((particle, index) => {
         ctx.beginPath();
@@ -147,9 +158,11 @@ const ThreeDBackground = () => {
         particle.x += particle.speedX;
         particle.y += particle.speedY;
 
-        if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+        // Bounce off walls
+        if (particle.x < 0 || particle.x > window.innerWidth) particle.speedX *= -1;
+        if (particle.y < 0 || particle.y > window.innerHeight) particle.speedY *= -1;
 
+        // Draw connections
         for (let j = index + 1; j < particles.length; j++) {
           const dx = particle.x - particles[j].x;
           const dy = particle.y - particles[j].y;
@@ -171,16 +184,18 @@ const ThreeDBackground = () => {
 
     draw();
 
+    window.addEventListener("resize", init);
+
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", init);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full z-0"
+      className="fixed inset-0 w-full h-full -z-10 pointer-events-none" // Changed to -z-10 and added pointer-events-none
       style={{
         background: "linear-gradient(135deg, #0a192f 0%, #19376d 100%)",
       }}
@@ -278,10 +293,11 @@ const LoadingScreen = ({ isLoading, progress, displayText }) => {
                   loop
                   muted
                   playsInline
+                  preload="auto"
                   className="w-full h-full object-cover rounded-md"
                   style={{ opacity: 1, transition: "opacity 1s ease-in-out" }}
                 >
-                  <source src={loadingVideo} type="video/mp4" />
+                  
                   Your browser does not support the video tag.
                 </video>
 
@@ -435,7 +451,7 @@ const LocationsList = () => {
               {loc.name}
             </h4>
             {/* Location Address/Description */}
-            <p className="text-cyan-200 text-sm mt-1">{loc.address}</p>
+            <p className="text-cyan-100 text-sm mt-1">{loc.address}</p>
           </div>
         ))}
       </div>
@@ -621,6 +637,12 @@ const DroneCompanyWebsite = () => {
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
                   index === currentImageIndex ? "opacity-100" : "opacity-0"
                 }`}
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "low"}
+                decoding="async"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
               />
             ))}
           </div>
@@ -667,17 +689,22 @@ const DroneCompanyWebsite = () => {
         </section>
         {/* Central Container */}
         <div className="container mx-auto px-4 max-w-7xl">
-
-          
           {/* Solutions Section (Unchanged) */}
-          <section id="solutions" className="py-20 relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+          <section
+            id="solutions"
+            className="py-16 md:py-24 lg:py-32 relative z-10"
+            aria-labelledby="solutions-heading"
+          >
+            <h2
+              id="solutions-heading"
+              className="text-3xl md:text-4xl font-bold text-center mb-16"
+            >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 Our Solutions
               </span>
             </h2>
-            <div className="text-center text-cyan-200 max-w-3xl mx-auto mb-16">
-              <p className="text-lg">
+            <div className="text-center text-cyan-100 max-w-3xl mx-auto mb-16">
+              <p className="text-lg leading-relaxed">
                 We provide cutting-edge solutions for electrical grid monitoring
                 and maintenance using advanced drone technology, AI, and IoT
                 integration.
@@ -709,20 +736,30 @@ const DroneCompanyWebsite = () => {
               ].map((solution, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 hover:border-cyan-500/40 hover:bg-gray-800/70 flex flex-col items-center md:items-start"
+                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 hover:border-cyan-500/40 hover:bg-gray-800/70 hover:shadow-xl hover:shadow-cyan-500/30 hover:-translate-y-1 flex flex-col items-center md:items-start shadow-lg shadow-cyan-900/20"
                 >
                   <div className="w-20 h-20 bg-cyan-900/30 rounded-xl flex items-center justify-center mb-6">
                     {solution.icon}
                   </div>
                   <img
                     src={solution.imageSrc}
-                    alt={solution.title}
-                    className="w-full h-48 object-cover rounded-lg mb-6 shadow-lg"
+                    alt={`${solution.title} - ${solution.description}`}
+                    className="w-full h-48 object-cover rounded-lg mb-6 shadow-lg transition-opacity duration-300"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      e.target.src =
+                        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="200"%3E%3Crect fill="%231f2937" width="400" height="200"/%3E%3Ctext fill="%2306b6d4" font-family="Arial" font-size="18" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage not available%3C/text%3E%3C/svg%3E';
+                    }}
+                    onLoad={(e) => {
+                      e.target.style.opacity = "1";
+                    }}
+                    style={{ opacity: 0 }}
                   />
                   <h3 className="text-2xl font-bold text-white mb-4 text-center md:text-left">
                     {solution.title}
                   </h3>
-                  <p className="text-cyan-200 text-center md:text-left">
+                  <p className="text-cyan-100 text-center md:text-left leading-relaxed">
                     {solution.description}
                   </p>
                 </div>
@@ -731,8 +768,15 @@ const DroneCompanyWebsite = () => {
           </section>
 
           {/* How It Works Section (Unchanged) */}
-          <section id="technology" className="py-20 relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+          <section
+            id="technology"
+            className="py-16 md:py-24 lg:py-32 relative z-10"
+            aria-labelledby="technology-heading"
+          >
+            <h2
+              id="technology-heading"
+              className="text-3xl md:text-4xl font-bold text-center mb-16"
+            >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 How It Works
               </span>
@@ -797,12 +841,24 @@ const DroneCompanyWebsite = () => {
                       <div className="w-full md:w-1/3 mb-4 md:mb-0 md:mr-6">
                         <img
                           src={item.image}
-                          alt={item.title}
-                          className="w-full h-48 object-cover rounded-lg shadow-lg"
+                          alt={`${item.title} - Step ${item.step}: ${item.description}`}
+                          className="w-full h-48 object-cover rounded-lg shadow-lg transition-opacity duration-300"
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            e.target.src =
+                              'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="200"%3E%3Crect fill="%231f2937" width="400" height="200"/%3E%3Ctext fill="%2306b6d4" font-family="Arial" font-size="18" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage not available%3C/text%3E%3C/svg%3E';
+                          }}
+                          onLoad={(e) => {
+                            e.target.style.opacity = "1";
+                          }}
+                          style={{ opacity: 0 }}
                         />
                       </div>
                       <div className="w-full md:w-2/3">
-                        <p className="text-cyan-200">{item.description}</p>
+                        <p className="text-cyan-100 leading-relaxed">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -812,8 +868,15 @@ const DroneCompanyWebsite = () => {
           </section>
 
           {/* Why It Matters Section (Unchanged) */}
-          <section id="benefits" className="py-20 relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+          <section
+            id="benefits"
+            className="py-16 md:py-24 lg:py-32 relative z-10"
+            aria-labelledby="benefits-heading"
+          >
+            <h2
+              id="benefits-heading"
+              className="text-3xl md:text-4xl font-bold text-center mb-16"
+            >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 Why It Matters
               </span>
@@ -851,7 +914,7 @@ const DroneCompanyWebsite = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 shadow-sm hover:shadow-md hover:border-cyan-500/40"
+                  className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-500/20 interactive feature-card opacity-0 transform translate-y-10 transition-all duration-700 shadow-lg shadow-cyan-900/20 hover:shadow-xl hover:shadow-cyan-500/30 hover:border-cyan-500/40 hover:-translate-y-1"
                 >
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-cyan-900/30 rounded-lg flex items-center justify-center mr-4">
@@ -863,24 +926,43 @@ const DroneCompanyWebsite = () => {
                   </div>
                   <img
                     src={item.image}
-                    alt={item.title}
-                    className="w-full h-48 object-cover rounded-lg mb-6 shadow-lg"
+                    alt={`${item.title} - ${item.description}`}
+                    className="w-full h-48 object-cover rounded-lg mb-6 shadow-lg transition-opacity duration-300"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      e.target.src =
+                        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="200"%3E%3Crect fill="%231f2937" width="400" height="200"/%3E%3Ctext fill="%2306b6d4" font-family="Arial" font-size="18" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage not available%3C/text%3E%3C/svg%3E';
+                    }}
+                    onLoad={(e) => {
+                      e.target.style.opacity = "1";
+                    }}
+                    style={{ opacity: 0 }}
                   />
-                  <p className="text-cyan-200">{item.description}</p>
+                  <p className="text-cyan-100 leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
               ))}
             </div>
           </section>
 
           {/* === UPDATED: Contact Section now uses LocationsGlobe === */}
-          <section id="contact" className="py-20 relative z-10">
+          <section
+            id="contact"
+            className="py-16 md:py-24 lg:py-32 relative z-10"
+            aria-labelledby="contact-heading"
+          >
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2
+                id="contact-heading"
+                className="text-3xl md:text-4xl font-bold mb-4"
+              >
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                   Get In Touch & Our Locations
                 </span>
               </h2>
-              <p className="text-xl text-cyan-200 max-w-3xl mx-auto">
+              <p className="text-xl text-cyan-100 max-w-3xl mx-auto leading-relaxed">
                 Ready to transform your electrical grid management? Contact us
                 or explore our global presence.
               </p>
@@ -897,7 +979,7 @@ const DroneCompanyWebsite = () => {
                 <h3 className="text-2xl font-bold mb-6 text-cyan-400">
                   Send us a message
                 </h3>
-                <p className="text-cyan-200 mb-6 max-w-sm">
+                <p className="text-cyan-100 mb-6 max-w-sm leading-relaxed">
                   Have a question or want to request a demo? Click the button
                   below to open our contact form.
                 </p>
@@ -905,7 +987,8 @@ const DroneCompanyWebsite = () => {
                   href="https://forms.gle/ou4h4RWvYLPB983h7" // Replace with your actual form link
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full max-w-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive flex items-center justify-center"
+                  className="w-full max-w-xs bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-cyan-400 hover:to-blue-500 active:from-cyan-600 active:to-blue-700 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 interactive flex items-center justify-center min-h-[44px]"
+                  aria-label="Open contact form in new window"
                 >
                   <Send size={20} className="mr-2" />
                   Open Contact Form
@@ -929,8 +1012,14 @@ const DroneCompanyWebsite = () => {
                 <div className="w-30 h-30 rounded-lg flex items-center justify-center mr-3 p-2">
                   <img
                     src={logoImg}
-                    alt="COEUS Logo"
+                    alt="COEUS Logo - Intelligent Inspection and Detection as a Service"
                     className="w-full h-full object-contain"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
                   />
                 </div>
               </div>
@@ -991,7 +1080,8 @@ const CareersPage = () => {
         "Unsupervised Learning",
       ],
       imageUrl: ml_engineer,
-      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSdHytlju1zdCSo-AXPnNVy3Zuw9LKJHFcwbimCp8owEYRSgjg/viewform?usp=header", // Replace with actual link
+      applicationLink:
+        "https://docs.google.com/forms/d/e/1FAIpQLSdHytlju1zdCSo-AXPnNVy3Zuw9LKJHFcwbimCp8owEYRSgjg/viewform?usp=header", // Replace with actual link
     },
     {
       title: "Embedded Systems Engineer (Edge AI / Drones)",
@@ -1010,7 +1100,8 @@ const CareersPage = () => {
         "Signal Processing",
       ],
       imageUrl: embeddedsystemengineer,
-      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSecSnT5SJO2UbFGbGDSr-fsGtTJQw8ToCulFBxDaL8VwddaFA/viewform?usp=header", // Replace with actual link
+      applicationLink:
+        "https://docs.google.com/forms/d/e/1FAIpQLSecSnT5SJO2UbFGbGDSr-fsGtTJQw8ToCulFBxDaL8VwddaFA/viewform?usp=header", // Replace with actual link
     },
     {
       title: "IoT Solutions Architect",
@@ -1028,7 +1119,8 @@ const CareersPage = () => {
         "Encryption",
       ],
       imageUrl: iotsolution,
-      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSf9wGnE2NlVvBhphjsv3tQqussggRBjIjqlMlZYWOW076Vxcw/viewform?usp=header", // Replace with actual link
+      applicationLink:
+        "https://docs.google.com/forms/d/e/1FAIpQLSf9wGnE2NlVvBhphjsv3tQqussggRBjIjqlMlZYWOW076Vxcw/viewform?usp=header", // Replace with actual link
     },
     {
       title: "SAP BTP Architect",
@@ -1048,7 +1140,8 @@ const CareersPage = () => {
         "REST APIs",
       ],
       imageUrl: sapbtp,
-      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSfuH5JisO7tDZ4zaBctw9h8gS3C4yv_H9TR_8JtiFXPhMCq7A/viewform?usp=dialog", // Replace with actual link
+      applicationLink:
+        "https://docs.google.com/forms/d/e/1FAIpQLSfuH5JisO7tDZ4zaBctw9h8gS3C4yv_H9TR_8JtiFXPhMCq7A/viewform?usp=dialog", // Replace with actual link
     },
     {
       title: "Product Manager (Tech)",
@@ -1067,7 +1160,8 @@ const CareersPage = () => {
         "Analytics",
       ],
       imageUrl: productmanager,
-      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSeJnRXCTmne5XGYkIjj5BMlAYZv8Zx_8f0G05uS9-bTT3V8pQ/viewform?usp=publish-editor", // Replace with actual link
+      applicationLink:
+        "https://docs.google.com/forms/d/e/1FAIpQLSeJnRXCTmne5XGYkIjj5BMlAYZv8Zx_8f0G05uS9-bTT3V8pQ/viewform?usp=publish-editor", // Replace with actual link
     },
     {
       title: "FinOps Manager (Financial Operations)",
@@ -1086,7 +1180,8 @@ const CareersPage = () => {
         "CloudHealth",
       ],
       imageUrl: finopsmanager,
-      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLScy_ho_mh4ThB9Sp9USe4EsXdfoxxg-HBDFbK6NpRaBGgiUYw/viewform?usp=publish-editor", // Replace with actual link
+      applicationLink:
+        "https://docs.google.com/forms/d/e/1FAIpQLScy_ho_mh4ThB9Sp9USe4EsXdfoxxg-HBDFbK6NpRaBGgiUYw/viewform?usp=publish-editor", // Replace with actual link
     },
     {
       title: "Part-Time Remote Drone Operations Consultant",
@@ -1105,7 +1200,8 @@ const CareersPage = () => {
         "Remote Collaboration",
       ],
       imageUrl: remotedroneoperation,
-      applicationLink: "https://docs.google.com/forms/d/e/1FAIpQLSdP4j5XnHNNHwHLbODScr3zhhq61ZZ5MqpyftsHxiywOSv1HA/viewform?usp=publish-editor", // Replace with actual link
+      applicationLink:
+        "https://docs.google.com/forms/d/e/1FAIpQLSdP4j5XnHNNHwHLbODScr3zhhq61ZZ5MqpyftsHxiywOSv1HA/viewform?usp=publish-editor", // Replace with actual link
     },
   ];
 
@@ -1295,6 +1391,12 @@ const CareersPage = () => {
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
                   index === currentImageIndex ? "opacity-100" : "opacity-0"
                 }`}
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "low"}
+                decoding="async"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
               />
             ))}
             <div className="absolute inset-0 bg-black/60 z-10"></div>
@@ -1303,14 +1405,15 @@ const CareersPage = () => {
             <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
               Powering a Smarter Future
             </h1>
-            <p className="text-xl text-cyan-200 max-w-3xl mx-auto mb-10">
+            <p className="text-xl text-cyan-100 max-w-3xl mx-auto mb-10 leading-relaxed">
               Join us at the nexus of AI, robotics, and energy to solve one of
               the world's most critical challenges.
             </p>
             <a
               href="#openings"
               onClick={handleScrollToOpenings}
-              className="inline-flex items-center gap-3 mx-auto bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-20 text-lg rounded-lg hover:from-cyan-400 hover:to-blue-500 transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 interactive"
+              className="inline-flex items-center gap-3 mx-auto bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-20 text-lg rounded-lg hover:from-cyan-400 hover:to-blue-500 active:from-cyan-600 active:to-blue-700 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 interactive min-h-[44px]"
+              aria-label="View open job positions"
             >
               View Open Positions
               <ArrowRight size={20} />
@@ -1333,7 +1436,7 @@ const CareersPage = () => {
                 <h3 className="text-xl font-semibold mb-2">
                   Innovate & Impact
                 </h3>
-                <p className="text-cyan-200">
+                <p className="text-cyan-100 leading-relaxed">
                   Work on cutting-edge AI and drone tech solving real-world
                   energy problems.
                 </p>
@@ -1343,7 +1446,7 @@ const CareersPage = () => {
                 <h3 className="text-xl font-semibold mb-2">
                   Collaborative Culture
                 </h3>
-                <p className="text-cyan-200">
+                <p className="text-cyan-100 leading-relaxed">
                   Join a supportive team passionate about technology and
                   sustainability.
                 </p>
@@ -1353,7 +1456,7 @@ const CareersPage = () => {
                 <h3 className="text-xl font-semibold mb-2">
                   Growth & Learning
                 </h3>
-                <p className="text-cyan-200">
+                <p className="text-cyan-100 leading-relaxed">
                   Opportunities for professional development in a fast-growing
                   industry.
                 </p>
@@ -1370,7 +1473,7 @@ const CareersPage = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-cyan-400">
               Current Openings
             </h2>
-            <p className="text-center text-cyan-200 mb-10">
+            <p className="text-center text-cyan-100 mb-10 leading-relaxed">
               Find your next opportunity in our list of open positions.
             </p>
 
@@ -1393,10 +1496,11 @@ const CareersPage = () => {
                   id="department-filter"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
+                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-100 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 focus:border-cyan-500 transition-all cursor-pointer interactive min-h-[44px]"
                   whileHover={{ scale: 1.02, borderColor: "#06B6D4" }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  aria-label="Filter jobs by department"
                 >
                   {departments.map((dept) => (
                     <option
@@ -1424,10 +1528,11 @@ const CareersPage = () => {
                   id="location-filter"
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-200 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all cursor-pointer interactive"
+                  className="w-full appearance-none bg-gray-700/50 border border-cyan-500/30 text-cyan-100 text-center font-medium py-3 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 focus:border-cyan-500 transition-all cursor-pointer interactive min-h-[44px]"
                   whileHover={{ scale: 1.02, borderColor: "#06B6D4" }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  aria-label="Filter jobs by location"
                 >
                   {locations.map((loc) => (
                     <option
@@ -1451,7 +1556,7 @@ const CareersPage = () => {
               initial={{ opacity: 0, y: -15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="text-center text-cyan-200 mb-10"
+              className="text-center text-cyan-100 mb-10"
             >
               {filteredJobs.length > 0 ? (
                 <p className="text-lg">
@@ -1470,10 +1575,10 @@ const CareersPage = () => {
 
             {/* === Job Card Display === */}
             <div className="relative min-h-[600px] md:min-h-[650px]">
-              {" "}
+              
               {/* Increased min-height slightly */}
               <AnimatePresence mode="wait" custom={direction}>
-                                               {" "}
+                                               
                 {filteredJobs.length > 0 &&
                   (() => {
                     const job = filteredJobs[currentJobIndex];
@@ -1485,14 +1590,35 @@ const CareersPage = () => {
                         href={job.applicationLink} // <-- Use the specific link
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="absolute inset-0 block p-6 md:p-8 rounded-2xl border border-cyan-500/20 text-center overflow-y-auto group hover:border-cyan-400/60 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${job.imageUrl})` }}
+                        className="absolute inset-0 block p-6 md:p-8 rounded-2xl border border-cyan-500/20 text-center overflow-y-auto group hover:border-cyan-400/60 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${job.imageUrl})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
                         custom={direction}
                         variants={jobCardVariants}
                         initial="enter"
                         animate="center"
                         exit="exit"
+                        aria-label={`View and apply for ${job.title} position`}
                       >
+                        {/* Preload image for better performance */}
+                        <img
+                          src={job.imageUrl}
+                          alt={`${job.title} - ${job.department} position`}
+                          className="hidden"
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            // Fallback to gradient if image fails
+                            const parent = e.target.closest("a");
+                            if (parent) {
+                              parent.style.backgroundImage =
+                                "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)";
+                            }
+                          }}
+                        />
                         {/* Background Overlays */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/75 to-transparent z-0"></div>
                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-blue-700/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-0"></div>
@@ -1512,8 +1638,8 @@ const CareersPage = () => {
                             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">
                               {job.title}
                             </h3>
-                            {/* Details */}
-                            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-white mb-4 text-base md:text-lg">
+                            {/* Details */}                     {" "}
+                            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-white mb-4 text-base md:text-lg">
                               <span className="flex items-center whitespace-nowrap">
                                 <Briefcase size={18} className="mr-2" />
                                 {job.department}
@@ -1530,12 +1656,12 @@ const CareersPage = () => {
                             {/* Divider */}
                             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent mx-auto mb-6"></div>
                             {/* Description */}
-                            <p className="text-cyan-200/95 text-base md:text-lg max-w-3xl mx-auto mb-6 text-justify line-clamp-3 md:line-clamp-4">
+                            <p className="text-cyan-100/95 text-base md:text-lg max-w-3xl mx-auto mb-6 text-justify line-clamp-3 md:line-clamp-4 leading-relaxed">
                               {job.description}
                             </p>
                             {/* === MODIFIED SKILLS SECTION (v5) === */}
                             <div className="mb-8">
-                              <h4 className="font-semibold text-cyan-200/80 mb-4 text-base">
+                              <h4 className="font-semibold text-cyan-100/90 mb-4 text-base">
                                 Required Skills
                               </h4>
 
@@ -1580,7 +1706,7 @@ const CareersPage = () => {
                   <motion.button
                     onClick={showPrevJob}
                     /* MODIFIED: Increased px-6 to px-8 and gap-2 to gap-3 */
-                    className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-bold py-3 px-10 rounded-lg interactive shadow-lg shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-bold py-3 px-10 rounded-lg interactive shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] transition-all duration-200 active:scale-95"
                     aria-label="Previous job"
                     whileHover={{
                       scale: 1.05,
@@ -1594,7 +1720,7 @@ const CareersPage = () => {
                   <motion.button
                     onClick={showNextJob}
                     /* MODIFIED: Increased px-6 to px-8 and gap-2 to gap-3 */
-                    className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-bold py-3 px-10 rounded-lg interactive shadow-lg shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-bold py-3 px-10 rounded-lg interactive shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] transition-all duration-200 active:scale-95"
                     aria-label="Next job"
                     whileHover={{
                       scale: 1.05,
@@ -1619,13 +1745,16 @@ const CareersPage = () => {
             {/* Carousel Container */}
             <div
               className="relative max-w-2xl mx-auto h-[450px] md:h-[350px]"
-              style={{ perspective: "1500px" }}
+              style={{
+                perspective: "1500px",
+                WebkitPerspective: "1500px", // Critical for Safari
+              }}
             >
               <AnimatePresence mode="wait" custom={hiringStepDirection}>
                 <motion.div
                   key={hiringSteps[currentHiringStep].title} // Key change triggers animation
                   className="absolute w-full h-full p-8 md:p-10 rounded-2xl bg-gray-800/60 backdrop-blur-lg border border-cyan-500/25 shadow-xl flex flex-col items-center justify-center text-center"
-                  style={{ transformStyle: "preserve-3d" }}
+                  style={{ transformStyle: "preserve-3d", WebkitTransformStyle: "preserve-3d"}}
                   custom={hiringStepDirection}
                   variants={hiringCardVariants}
                   initial="enter"
@@ -1639,7 +1768,7 @@ const CareersPage = () => {
                   <h3 className="text-2xl font-bold text-white mb-3">
                     {hiringSteps[currentHiringStep].title}
                   </h3>
-                  <p className="text-cyan-200 text-base max-w-md">
+                  <p className="text-cyan-100 text-base max-w-md leading-relaxed">
                     {hiringSteps[currentHiringStep].description}
                   </p>
                 </motion.div>
@@ -1729,7 +1858,6 @@ const AnimatedGradientBackground = () => {
     />
   );
 };
-
 
 // const Header = () => null;
 
@@ -1971,7 +2099,7 @@ const TalentSolutionsPage = () => {
               Advanced Talent Solutions
             </motion.h1>
             <motion.p
-              className="text-xl text-cyan-200 max-w-3xl mx-auto"
+              className="text-xl text-cyan-100 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -1991,10 +2119,8 @@ const TalentSolutionsPage = () => {
             </h2>
             {/* Adjusted max-width for the entire section content */}
             <div className="flex flex-col md:flex-row gap-8 max-w-4xl mx-auto">
-              
-              
-              <div className="flex flex-col gap-4 w-full md:w-1/2 mx-auto">
-
+                                         {" "}
+              <div className="flex flex-col gap-4 w-full md:w-1/2 mx-auto">
                 {coreOfferings.map((service, index) => (
                   <button
                     key={index}
@@ -2039,7 +2165,7 @@ const TalentSolutionsPage = () => {
                           className={`text-lg font-bold transition-colors ${
                             activeOffering === index
                               ? "text-white"
-                              : "text-cyan-200"
+                              : "text-cyan-100"
                           }`}
                         >
                           {service.title}
@@ -2049,7 +2175,6 @@ const TalentSolutionsPage = () => {
                   </button>
                 ))}
               </div>
-
               {/* Right Side: Content Display */}
               {/* Adjusted width for the content display */}
               <div className="w-full md:w-1/2 min-h-[400px] relative">
@@ -2093,7 +2218,7 @@ const TalentSolutionsPage = () => {
                     </h3>
 
                     {/* This description is now centered */}
-                    <p className="text-cyan-200 mb-6">
+                    <p className="text-cyan-100 mb-6 leading-relaxed">
                       {coreOfferings[activeOffering].description}
                     </p>
 
@@ -2119,8 +2244,6 @@ const TalentSolutionsPage = () => {
               </div>
             </div>
           </section>
-
-
 
           {/* === [IMPROVED] "Our Partnership Process" Animated Horizontal Flowchart === */}
           <section className="py-20 relative">
@@ -2252,8 +2375,6 @@ const TalentSolutionsPage = () => {
               ))}
             </motion.div>
           </section>
-
-
 
           {/* === "Why Partner With Us?" (IMPROVED with framer-motion) === */}
           <section className="py-16">

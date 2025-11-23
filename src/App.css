@@ -880,3 +880,8 @@ button, a, .interactive {
   filter: contrast(1.1) saturate(1.2) brightness(0.9);
 }
 
+/* Add this to your main CSS file to fix Safari Glassmorphism */
+.backdrop-blur-md, .backdrop-blur-xl, .backdrop-blur-lg {
+  -webkit-backdrop-filter: blur(12px); /* Vital for Safari */
+  backdrop-filter: blur(12px);
+}
